@@ -5,6 +5,7 @@ import com.jakm.workflow.GeneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class CommandLineStarter {
@@ -35,8 +36,17 @@ public class CommandLineStarter {
 
     List<Block> blockSetCreator(List<String> input) {
 
+        if (input == null || input.size() == 0) return null;
 
-        return new ArrayList<Block>();
+        List<Block> blocks = new ArrayList<>();
+
+        for (Iterator<String> it = input.iterator(); it.hasNext(); ) {
+            Block b = new Block();
+            b.setName(it.next());
+            blocks.add(b);
+        }
+
+        return blocks;
 
     }
 
