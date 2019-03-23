@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CommandLineStarterTest {
+class CommandLineStarterTest {
 
     private CommandLineStarter classToTest;
 
@@ -30,6 +30,43 @@ public class CommandLineStarterTest {
     }
 
     @Test
+    void testInputsAreRejectedBecauseNullTargetButNotNullInitialState() {
+
+        String testBlockA = "A";
+        String testBlockB = "B";
+
+        List<String> testInitialState = new ArrayList<>();
+        testInitialState.add(testBlockA);
+        testInitialState.add(testBlockB);
+
+
+        assertThrows(RuntimeException.class, () -> classToTest.begin(testInitialState, null));
+    }
+
+    @Test
+    void testInputsAreRejectedAgain() {
+
+        assertThrows(RuntimeException.class, () -> classToTest.begin(null, new ArrayList<>()));
+    }
+
+    @Test
+    void testInputsAreRejectedForAnotherReason() {
+
+        String testBlockA = "A";
+        String testBlockB = "B";
+
+        List<String> testInitialState = new ArrayList<>();
+        testInitialState.add(testBlockA);
+        testInitialState.add(testBlockB);
+
+        List<String> testTargetState = new ArrayList<>();
+        testTargetState.add(testBlockA);
+
+        assertThrows(RuntimeException.class, () -> classToTest.begin(testInitialState, testTargetState));
+    }
+
+
+    @Test
     void testTidyBlockSetCreator() {
 
         List<String> testList = new ArrayList<>();
@@ -37,7 +74,7 @@ public class CommandLineStarterTest {
 
         Block targetBlock = new Block();
         targetBlock.setName("A");
-        List<Block> targetList = new ArrayList();
+        List<Block> targetList = new ArrayList<Block>();
         targetList.add(targetBlock);
 
         List<Block> blocks = classToTest.blockSetCreator(testList);

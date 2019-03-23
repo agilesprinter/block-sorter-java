@@ -2,21 +2,44 @@ package com.jakm.interfaces;
 
 import com.jakm.entities.Block;
 import com.jakm.workflow.GeneticAlgorithm;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+@SpringBootApplication
 public class CommandLineStarter {
 
 
-    public static void main(String currentState[], String targetState[]) {
+    public static void main(String args[]) {
+
+        SpringApplication.run(CommandLineStarter.class, args);
 
         //this is where we'll start the project
 
-        new CommandLineStarter().begin(Arrays.asList(currentState), Arrays.asList(targetState));
+        //new CommandLineStarter().begin(Arrays.asList(currentState), Arrays.asList(targetState));
 
+    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+
+            System.out.println("Let's inspect the beans provided by Spring Boot:");
+
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                System.out.println(beanName);
+            }
+
+        };
     }
 
     void begin(List<String> current, List<String> target) {
