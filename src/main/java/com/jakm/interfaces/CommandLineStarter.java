@@ -8,10 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class CommandLineStarter {
@@ -23,7 +20,18 @@ public class CommandLineStarter {
 
         //this is where we'll start the project
 
-        //new CommandLineStarter().begin(Arrays.asList(currentState), Arrays.asList(targetState));
+        if (args == null || args.length == 0) {
+            throw new RuntimeException("Please pass a single argument showing initial and target state");
+        }
+
+        if (args.length % 2 != 0) {
+            throw new RuntimeException("Please pass a single argument showing initial and target state");
+        }
+        ;
+
+        Map<String, List> formattedLists = getListsFromArray(args);
+
+        new CommandLineStarter().begin(formattedLists.get("currentState"), formattedLists.get("targetState"));
 
     }
 
@@ -40,6 +48,31 @@ public class CommandLineStarter {
             }
 
         };
+    }
+
+    static Map getListsFromArray(String[] args) {
+
+        List<String> currentState = new ArrayList<String>();
+        List<String> targetState = new ArrayList<String>();
+
+        int counter = 0;
+
+        for (String block : args) {
+            counter++;
+            if (counter <= block.length() / 2) {
+                currentState.add(block);
+            }
+            targetState.add(block);
+        }
+
+        Map<String, List> lists = new HashMap<>();
+
+        lists.put("currentState", currentState);
+        lists.put("targetState", targetState);
+
+        return lists;
+
+
     }
 
     void begin(List<String> current, List<String> target) {
