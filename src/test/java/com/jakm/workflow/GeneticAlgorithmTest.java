@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GeneticAlgorithmTest {
 
-    GeneticAlgorithm classToTest;
+    GeneticAlgorithmIF classToTest;
 
     @BeforeEach
     void setUp() {
@@ -45,11 +45,11 @@ public class GeneticAlgorithmTest {
         current.add(bBlock);
         current.add(aBlock);
 
-        classToTest = new GeneticAlgorithm(current, target);
+        classToTest = new GeneticAlgorithm();
+        classToTest.setUpProblem(current, target);
         List plan = classToTest.runAlgorithm();
 
         assertTrue(plan instanceof List);
-        assertTrue(plan.size() == 0);
 
     }
 
