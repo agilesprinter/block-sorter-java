@@ -2,21 +2,21 @@ package com.jakm.interfaces;
 
 import com.jakm.entities.Block;
 import com.jakm.workflow.GeneticAlgorithm;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.jakm.workflow.GeneticAlgorithmIF;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
 
-@SpringBootApplication
+
 public class CommandLineStarter {
+
 
 
     public static void main(String args[]) {
 
-        SpringApplication.run(CommandLineStarter.class, args);
+
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         //this is where we'll start the project
 
@@ -31,24 +31,16 @@ public class CommandLineStarter {
 
         Map<String, List> formattedLists = getListsFromArray(args);
 
-        new CommandLineStarter().begin(formattedLists.get("currentState"), formattedLists.get("targetState"));
+
+        GeneticAlgorithmIF geneticAlgorithm = applicationContext.getBean("geneticAlgorithm", GeneticAlgorithm.class);
+
+        geneticAlgorithm.setUpProblem(formattedLists.get("currentState"), formattedLists.get("targetState"));
+
+        geneticAlgorithm.runAlgorithm();
+
 
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-
-        };
-    }
 
     static Map getListsFromArray(String[] args) {
 
@@ -75,20 +67,7 @@ public class CommandLineStarter {
 
     }
 
-    void begin(List<String> current, List<String> target) {
 
-        if (current == null || current.size() == 0)
-            throw new RuntimeException("This program must be run with two arrays");
-
-        if (target == null || target.size() == 0)
-            throw new RuntimeException("This program must be run with two arrays");
-
-        if (target.size() != current.size())
-            throw new RuntimeException("This program must be run with equal sized lists");
-
-        GeneticAlgorithm algorithm = new GeneticAlgorithm(blockSetCreator(current), blockSetCreator(target));
-
-    }
 
     List<Block> blockSetCreator(List<String> input) {
 
