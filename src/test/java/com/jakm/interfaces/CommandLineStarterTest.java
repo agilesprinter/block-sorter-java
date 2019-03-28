@@ -22,48 +22,6 @@ class CommandLineStarterTest {
         classToTest = new CommandLineStarter();
     }
 
-    @Test
-    void testInputsAreRejected() {
-
-        //assertThrows(RuntimeException.class, () -> classToTest.begin(null, null));
-    }
-
-    @Test
-    void testInputsAreRejectedBecauseNullTargetButNotNullInitialState() {
-
-        String testBlockA = "A";
-        String testBlockB = "B";
-
-        List<String> testInitialState = new ArrayList<>();
-        testInitialState.add(testBlockA);
-        testInitialState.add(testBlockB);
-
-
-        //assertThrows(RuntimeException.class, () -> classToTest.begin(testInitialState, null));
-    }
-
-    @Test
-    void testInputsAreRejectedAgain() {
-
-        //assertThrows(RuntimeException.class, () -> classToTest.begin(null, new ArrayList<>()));
-    }
-
-    @Test
-    void testInputsAreRejectedForAnotherReason() {
-
-        String testBlockA = "A";
-        String testBlockB = "B";
-
-        List<String> testInitialState = new ArrayList<>();
-        testInitialState.add(testBlockA);
-        testInitialState.add(testBlockB);
-
-        List<String> testTargetState = new ArrayList<>();
-        testTargetState.add(testBlockA);
-
-        //assertThrows(RuntimeException.class, () -> classToTest.begin(testInitialState, testTargetState));
-    }
-
 
     @Test
     void testTidyBlockSetCreator() {
@@ -73,7 +31,7 @@ class CommandLineStarterTest {
 
         Block targetBlock = new Block();
         targetBlock.setName("A");
-        List<Block> targetList = new ArrayList<Block>();
+        List<Block> targetList = new ArrayList<>();
         targetList.add(targetBlock);
 
         List<Block> blocks = classToTest.blockSetCreator(testList);
