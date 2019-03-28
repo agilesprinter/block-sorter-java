@@ -1,23 +1,18 @@
 package com.jakm.workflow;
 
-import com.jakm.entities.Block;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class GeneticAlgorithm implements GeneticAlgorithmIF {
 
-    private List<Block> blocks;
-    private List<Block> target;
+    private List blocks;
+    private List target;
 
-
-    public List<Block> getTarget() {
-        return target;
-    }
-
-    public List<Block> getBlocks() {
-        return blocks;
-    }
 
     public void setUpProblem(List currentState, List target) {
         this.blocks = currentState;
