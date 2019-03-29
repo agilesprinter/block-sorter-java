@@ -33,9 +33,6 @@ public class CommandLineStarter {
 
     }
 
-
-
-
     List<Block> blockSetCreator(List<String> input) {
 
         if (input == null || input.size() == 0) return null;

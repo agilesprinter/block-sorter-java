@@ -31,4 +31,5 @@ public class GeneticAlgorithm implements GeneticAlgorithmIF {
 
     }
 
+
 }

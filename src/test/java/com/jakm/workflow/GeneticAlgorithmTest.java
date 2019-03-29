@@ -18,6 +18,7 @@ public class GeneticAlgorithmTest {
 
     @BeforeEach
     void setUp() {
+        classToTest = new GeneticAlgorithm();
     }
 
     @AfterEach
