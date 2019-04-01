@@ -1,22 +1,47 @@
 package com.jakm.entities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Stacks implements StacksIF {
 
     private Map<String, List> stackStore;
 
-    public Stacks(List<String> stackNameList) {
+    public Stacks(Set<String> stackNameList) {
 
         stackStore = new HashMap<>();
 
         for (String stack : stackNameList) {
             stackStore.put(stack, new ArrayList());
         }
+    }
+
+    /*
+    If you do not provide stack names, you will get 3
+     */
+    public Stacks() {
+
+        stackStore = new HashMap<>();
+
+        for (String stack : defaultStackNameList) {
+            stackStore.put(stack, new ArrayList());
+        }
+    }
+
+    public List<Block> blockSetCreator(List<String> input) {
+
+        if (input == null || input.size() == 0) return null;
+
+        List<Block> blocks = new ArrayList<>();
+
+        for (String anInput : input) {
+            Block b = new Block();
+            b.setName(anInput);
+            blocks.add(b);
+        }
+
+        return blocks;
+
     }
 
     @Override

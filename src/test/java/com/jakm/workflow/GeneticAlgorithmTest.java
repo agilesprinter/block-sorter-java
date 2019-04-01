@@ -19,6 +19,7 @@ public class GeneticAlgorithmTest {
     @BeforeEach
     void setUp() {
         classToTest = new GeneticAlgorithm();
+        //classToTest.setStacks(new Stacks());
     }
 
     @AfterEach
