@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GeneticAlgorithmTest {
 
-    GeneticAlgorithmIF classToTest;
+    private GeneticAlgorithmIF classToTest;
 
     @BeforeEach
     void setUp() {
@@ -35,13 +35,13 @@ public class GeneticAlgorithmTest {
         Block cBlock = new Block();
         aBlock.setName("C");
 
-        List<Block> target = new ArrayList<Block>();
+        List<Block> target = new ArrayList<>();
 
         target.add(aBlock);
         target.add(bBlock);
         target.add(cBlock);
 
-        List<Block> current = new ArrayList<Block>();
+        List<Block> current = new ArrayList<>();
         current.add(cBlock);
         current.add(bBlock);
         current.add(aBlock);

@@ -8,16 +8,15 @@ import java.util.Map;
 
 public class Stacks implements StacksIF {
 
-    Map<String, List> stackStore;
+    private Map<String, List> stackStore;
 
-    public void setUpStacks(List<String> stackList) {
+    public Stacks(List<String> stackNameList) {
 
         stackStore = new HashMap<>();
 
-        for (String stack : stackList) {
+        for (String stack : stackNameList) {
             stackStore.put(stack, new ArrayList());
         }
-
     }
 
     @Override
@@ -25,22 +24,23 @@ public class Stacks implements StacksIF {
         return stackStore;
     }
 
-    public void moveBlock(List<Block> fromStack, List<Block> toStack) {
-        if (fromStack == null) {
+    @Override
+    public void moveBlock(String fromStackCalled, String toStackCalled) {
+        if (fromStackCalled == null) {
             throw new RuntimeException("The origin stack is empty, cannot move from this stack");
         }
-        if (fromStack.isEmpty()) {
-            throw new RuntimeException("The origin stack is empty, cannot move from this stack");
-        }
-        if (toStack == null) {
+        if (toStackCalled == null) {
             throw new RuntimeException("The target stack is null, cannot move to this stack");
         }
-        if (!stackStore.keySet().contains(fromStack)) {
+        if (!stackStore.keySet().contains(fromStackCalled)) {
             throw new RuntimeException("The origin stack does not exist, cannot move to this stack");
         }
-        if (!stackStore.keySet().contains(toStack)) {
+        if (!stackStore.keySet().contains(toStackCalled)) {
             throw new RuntimeException("The target stack does not exist, cannot move to this stack");
         }
+
+        List<Block> fromStack = getStackStore().get(fromStackCalled);
+        List<Block> toStack = getStackStore().get(toStackCalled);
 
         Block topOfStackBlock = fromStack.get(fromStack.size() - 1);
         toStack.add(topOfStackBlock);

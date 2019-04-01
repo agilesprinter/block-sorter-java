@@ -5,11 +5,7 @@ import java.util.Map;
 
 public interface StacksIF {
 
-
-    void setUpStacks(List<String> stackList);
-
     Map<String, List> getStackStore();
 
-
-    void moveBlock(List<Block> originStack, List<Block> firstStack);
+    void moveBlock(String fromStack, String toStack);
 }

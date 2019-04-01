@@ -36,7 +36,7 @@ class BlockTest {
     void testNullThrowsException() {
 
         Block classToTest = new Block();
-        assertThrows(Exception.class, () -> classToTest.getName());
+        assertThrows(Exception.class, classToTest::getName);
 
     }
 

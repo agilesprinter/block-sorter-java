@@ -12,28 +12,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StacksTest {
 
-    StacksIF classToTest;
+    private StacksIF classToTest;
 
     @BeforeEach
     void setUp() {
-        classToTest = new Stacks();
+
+        List<String> stackList = new ArrayList<>();
+
+        stackList.add("originStack");
+        stackList.add("firstStack");
+        stackList.add("secondStack");
+
+        classToTest = new Stacks(stackList);
     }
 
 
     @Test
-    void setUpStacks_ensureStacksAndLabelsAreSetUp() {
-        List<String> stackList = new ArrayList<>();
-
-        stackList.add("origin");
-        stackList.add("firstStack");
-        stackList.add("secondStack");
-
-        classToTest.setUpStacks(stackList);
+    void constructoir_ensureStacksAndLabelsAreSetUp() {
 
         Map<String, List> stackStore = classToTest.getStackStore();
 
         assertTrue(stackStore.keySet().size() == 3);
-        assertTrue(stackStore.keySet().contains("origin"));
+        assertTrue(stackStore.keySet().contains("originStack"));
         assertTrue(stackStore.keySet().contains("firstStack"));
         assertTrue(stackStore.keySet().contains("secondStack"));
     }
@@ -41,15 +41,17 @@ public class StacksTest {
     @Test
     void moveBlock_easyTest() {
 
-        List<Block> originStack = new ArrayList<>();
-        List<Block> firstStack = new ArrayList<>();
-        List<Block> secondStack = new ArrayList<>();
+        Map<String, List> sackStore = classToTest.getStackStore();
+        List<Block> originStack = sackStore.get("originStack");
+        List<Block> firstStack = sackStore.get("firstStack");
+        //we are getting this stack just to check that it remains empty
+        List<Block> secondStack = sackStore.get("secondStack");
 
         Block blockA = new Block();
         blockA.setName("A");
         originStack.add(blockA);
 
-        classToTest.moveBlock(originStack, firstStack);
+        classToTest.moveBlock("originStack", "firstStack");
 
         //The block should have moved from the origin to the firstStack
         assertEquals(firstStack.get(0), blockA);

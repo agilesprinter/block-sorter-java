@@ -1,5 +1,6 @@
 package com.jakm.util;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UtilsTest {
 
-    Utils classToTest = new Utils();
+    private Utils classToTest;
+
+    @BeforeEach
+    void setUp() {
+        classToTest = new Utils();
+    }
 
     @Test
     void validateEntryArray_ShouldThrowExceptionOnNullArray() {
