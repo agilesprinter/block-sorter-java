@@ -3,6 +3,7 @@
 package com.jakm.workflow;
 
 import com.jakm.entities.Block;
+import com.jakm.entities.FitnessFunciton;
 import com.jakm.entities.Stacks;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ class GeneticAlgorithmTest {
 
     @BeforeEach
     void setUp() {
-        classToTest = new GeneticAlgorithm(new Stacks());
+        classToTest = new GeneticAlgorithm(new Stacks(), new FitnessFunciton());
     }
 
     @AfterEach

@@ -1,5 +1,7 @@
 package com.jakm.util;
 
+import com.jakm.entities.Block;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +47,28 @@ public class Utils {
         if (args.length % 2 != 0) {
             throw new RuntimeException("Please pass a single argument showing initial and target state");
         }
+
+    }
+
+    /**
+     * A simple utility method. Give me a list of strings, I'll make it into a list of Blocks
+     *
+     * @param input
+     * @return
+     */
+    public List<Block> blockSetCreator(List<String> input) {
+
+        if (input == null || input.size() == 0) return null;
+
+        List<Block> blocks = new ArrayList<>();
+
+        for (String anInput : input) {
+            Block b = new Block();
+            b.setName(anInput);
+            blocks.add(b);
+        }
+
+        return blocks;
 
     }
 }
