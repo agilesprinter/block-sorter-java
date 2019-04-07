@@ -28,6 +28,12 @@ public class Stacks implements StacksIF {
         }
     }
 
+    /**
+     * A simple utility method. Give me a list of strings, I'll make it into a list of Blocks
+     *
+     * @param input
+     * @return
+     */
     public List<Block> blockSetCreator(List<String> input) {
 
         if (input == null || input.size() == 0) return null;
@@ -62,6 +68,9 @@ public class Stacks implements StacksIF {
         }
         if (!stackStore.keySet().contains(toStackCalled)) {
             throw new RuntimeException("The target stack does not exist, cannot move to this stack");
+        }
+        if (stackStore.get(fromStackCalled) == null || stackStore.get(fromStackCalled).size() == 0) {
+            throw new RuntimeException("The from stack is null or empty- we cannot move anything from it");
         }
 
         List<Block> fromStack = getStackStore().get(fromStackCalled);

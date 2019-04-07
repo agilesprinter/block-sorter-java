@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CommandLineStarter {
-
-
+class CommandLineStarter {
 
     public static void main(String args[]) {
 

@@ -6,11 +6,15 @@ import java.util.Map;
 public interface StacksIF {
 
 
-    public final String[] defaultStackNameList = new String[]{"originStack", "firstStack", "secondStack"};
+    String ORIGIN_STACK = "originStack";
+    String FIRST_STACK = "firstStack";
+    String SECOND_STACK = "secondStack";
+
+    String[] defaultStackNameList = new String[]{ORIGIN_STACK, FIRST_STACK, SECOND_STACK};
 
     Map<String, List> getStackStore();
 
     void moveBlock(String fromStack, String toStack);
 
-    public List<Block> blockSetCreator(List<String> input);
+    List<Block> blockSetCreator(List<String> input);
 }

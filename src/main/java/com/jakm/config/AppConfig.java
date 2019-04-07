@@ -12,7 +12,7 @@ public class AppConfig {
     @Bean(name = "geneticAlgorithm")
     public GeneticAlgorithmIF getGeneticAlgorithm() {
 
-        return new GeneticAlgorithm();
+        return new GeneticAlgorithm(getStacks());
     }
 
     @Bean(name = "stacks")

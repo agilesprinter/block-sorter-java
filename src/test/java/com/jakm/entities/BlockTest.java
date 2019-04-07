@@ -16,7 +16,11 @@ class BlockTest {
 
     @BeforeEach
     void setUp() {
+
+        classToTest = new Block();
+
     }
+
 
     @AfterEach
     void tearDown() {
@@ -24,7 +28,7 @@ class BlockTest {
 
     @Test
     void testAccess() {
-        Block classToTest = new Block();
+
 
         classToTest.setName("A");
 
@@ -35,7 +39,6 @@ class BlockTest {
     @Test
     void testNullThrowsException() {
 
-        Block classToTest = new Block();
         assertThrows(Exception.class, classToTest::getName);
 
     }
