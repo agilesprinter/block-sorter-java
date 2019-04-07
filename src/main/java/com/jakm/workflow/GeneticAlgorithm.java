@@ -1,5 +1,6 @@
 package com.jakm.workflow;
 
+import com.jakm.entities.FitnessFunciton;
 import com.jakm.entities.Stacks;
 import com.jakm.entities.StacksIF;
 import lombok.Getter;
@@ -14,9 +15,11 @@ public class GeneticAlgorithm implements GeneticAlgorithmIF {
     private List blocks;
     private List target;
     private Stacks stacks;
+    private FitnessFunciton fitnessFunciton;
 
-    public GeneticAlgorithm(Stacks stacks) {
+    public GeneticAlgorithm(Stacks stacks, FitnessFunciton fitnessFunciton) {
         this.stacks = stacks;
+        this.fitnessFunciton = fitnessFunciton;
     }
 
     public void setUpProblem(List currentState, List target) {

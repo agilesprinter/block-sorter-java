@@ -3,12 +3,13 @@ package com.jakm.entities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StacksTest {
 
@@ -26,29 +27,6 @@ class StacksTest {
         classToTest = new Stacks(stackList);
     }
 
-    @Test
-    void testTidyBlockSetCreator() {
-
-        List<String> testList = new ArrayList<>();
-        testList.add("A");
-
-        Block targetBlock = new Block();
-        targetBlock.setName("A");
-        List<Block> targetList = new ArrayList<>();
-        targetList.add(targetBlock);
-
-        List<Block> blocks = classToTest.blockSetCreator(testList);
-
-
-        assertThat(blocks.get(0).getName(), is(equalTo(targetList.get(0).getName())));
-
-    }
-
-
-    @Test
-    void testEmptyOrNullGivesNull() {
-        assertNull(classToTest.blockSetCreator(null));
-    }
 
     @Test
     void constructoir_ensureStacksAndLabelsAreSetUp() {

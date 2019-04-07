@@ -16,5 +16,5 @@ public interface StacksIF {
 
     void moveBlock(String fromStack, String toStack);
 
-    List<Block> blockSetCreator(List<String> input);
+
 }

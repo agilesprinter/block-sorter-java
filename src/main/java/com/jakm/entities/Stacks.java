@@ -28,28 +28,6 @@ public class Stacks implements StacksIF {
         }
     }
 
-    /**
-     * A simple utility method. Give me a list of strings, I'll make it into a list of Blocks
-     *
-     * @param input
-     * @return
-     */
-    public List<Block> blockSetCreator(List<String> input) {
-
-        if (input == null || input.size() == 0) return null;
-
-        List<Block> blocks = new ArrayList<>();
-
-        for (String anInput : input) {
-            Block b = new Block();
-            b.setName(anInput);
-            blocks.add(b);
-        }
-
-        return blocks;
-
-    }
-
     @Override
     public Map<String, List> getStackStore() {
         return stackStore;
