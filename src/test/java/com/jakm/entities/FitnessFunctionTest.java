@@ -31,10 +31,10 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldRetunr3() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList(new String[]{"A", "B", "C"}));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList(new String[]{"A", "B", "C"}));
+        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
 
-        assertEquals(classToTest.howFit(targetState, currentState), 3);
+        assertEquals(3, classToTest.howFit(targetState, currentState));
 
 
     }
@@ -42,10 +42,10 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldReturn1() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList(new String[]{"A", "B", "C"}));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList(new String[]{"A", "C", "B"}));
+        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("A", "C", "B"));
 
-        assertEquals(classToTest.howFit(targetState, currentState), 1);
+        assertEquals(1, classToTest.howFit(targetState, currentState));
 
 
     }
@@ -53,11 +53,47 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldReturn0() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList(new String[]{"A", "B", "C"}));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList(new String[]{"C", "A", "B"}));
+        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("C", "A", "B"));
 
-        assertEquals(classToTest.howFit(targetState, currentState), 0);
+        assertEquals(0, classToTest.howFit(targetState, currentState));
 
+
+    }
+
+    @Test
+    void percentageFit_should_return_100() {
+
+        int targetStateSize = 5, rawScore = 5;
+
+        assertEquals(100, classToTest.percentageFit(targetStateSize, rawScore));
+
+    }
+
+    @Test
+    void percentageFit_should_return_50() {
+
+        int targetStateSize = 6, rawScore = 3;
+
+        assertEquals(50, classToTest.percentageFit(targetStateSize, rawScore));
+
+    }
+
+    @Test
+    void percentageFit_should_return_0_for_target_0() {
+
+        int targetStateSize = 0, rawScore = 3;
+
+        assertEquals(0, classToTest.percentageFit(targetStateSize, rawScore));
+
+    }
+
+    @Test
+    void percentageFit_should_return_0_for_rawScore_0() {
+
+        int targetStateSize = 6, rawScore = 0;
+
+        assertEquals(0, classToTest.percentageFit(targetStateSize, rawScore));
 
     }
 
