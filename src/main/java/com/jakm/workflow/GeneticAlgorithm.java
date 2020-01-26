@@ -29,7 +29,8 @@ public class GeneticAlgorithm implements GeneticAlgorithmIF {
         this.blocks = currentState;
         this.target = target;
 
-        //now set the origin stack to be that of the currentState
+        //now set the origin stack to be that of the currentState. The current state is the randomly ordered block set
+        //that we want to be sorted with the GA
 
         stacks.getStackStore().put(StacksIF.ORIGIN_STACK, currentState);
 

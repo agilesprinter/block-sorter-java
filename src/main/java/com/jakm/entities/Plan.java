@@ -26,7 +26,8 @@ public class Plan {
 
         LinkedHashMap<Integer, String> plan = new LinkedHashMap();
 
-/*        for (int i = 0; i < planSize; i++) {
+/*
+        for (int i = 0; i < planSize; i++) {
             int from = (int)Math.round(Math.random() * (stackNames.length) -1);
             int to = (int)Math.round(Math.random() * (stackNames.length -1));
 
