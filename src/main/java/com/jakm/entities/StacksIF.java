@@ -14,7 +14,7 @@ public interface StacksIF {
 
     Map<String, List> getStackStore();
 
-    void moveBlock(String fromStack, String toStack);
+    void moveBlock(Step step);
 
 
 }

@@ -5,14 +5,15 @@ import java.util.*;
 
 public class Stacks implements StacksIF {
 
-    private Map<String, List> stackStore;
+    private final Map<String, List> stackStore;
 
     public Stacks(Set<String> stackNameList) {
 
         stackStore = new HashMap<>();
 
         for (String stack : stackNameList) {
-            stackStore.put(stack, new ArrayList());
+            //Each stack is just an ordered list of Steps
+            stackStore.put(stack, new <Step>ArrayList());
         }
     }
 
@@ -34,25 +35,25 @@ public class Stacks implements StacksIF {
     }
 
     @Override
-    public void moveBlock(String fromStackCalled, String toStackCalled) {
-        if (fromStackCalled == null) {
+    public void moveBlock(Step step) {
+        if (step.getFrom() == null) {
             throw new RuntimeException("The origin stack is empty, cannot move from this stack");
         }
-        if (toStackCalled == null) {
+        if (step.getTo() == null) {
             throw new RuntimeException("The target stack is null, cannot move to this stack");
         }
-        if (!stackStore.keySet().contains(fromStackCalled)) {
+        if (!stackStore.containsKey(step.getFrom())) {
             throw new RuntimeException("The origin stack does not exist, cannot move to this stack");
         }
-        if (!stackStore.keySet().contains(toStackCalled)) {
+        if (!stackStore.containsKey(step.getTo())) {
             throw new RuntimeException("The target stack does not exist, cannot move to this stack");
         }
-        if (stackStore.get(fromStackCalled) == null || stackStore.get(fromStackCalled).size() == 0) {
+        if (stackStore.get(step.getFrom()) == null || stackStore.get(step.getFrom()).size() == 0) {
             throw new RuntimeException("The from stack is null or empty- we cannot move anything from it");
         }
 
-        List<Block> fromStack = getStackStore().get(fromStackCalled);
-        List<Block> toStack = getStackStore().get(toStackCalled);
+        List<Block> fromStack = getStackStore().get(step.getFrom());
+        List<Block> toStack = getStackStore().get(step.getTo());
 
         Block topOfStackBlock = fromStack.get(fromStack.size() - 1);
         toStack.add(topOfStackBlock);

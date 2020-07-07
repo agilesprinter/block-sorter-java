@@ -1,9 +1,6 @@
 package com.jakm.workflow;
 
-import com.jakm.entities.FitnessFunciton;
-import com.jakm.entities.PlanManager;
-import com.jakm.entities.Stacks;
-import com.jakm.entities.StacksIF;
+import com.jakm.entities.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,9 +36,9 @@ public class GeneticAlgorithm implements GeneticAlgorithmIF {
 
     public List<String> runAlgorithm() {
 
-        stacks.moveBlock("originStack", "firstStack");
-        stacks.moveBlock("originStack", "firstStack");
-        stacks.moveBlock("originStack", "secondStack");
+        stacks.moveBlock(new Step("originStack", "firstStack"));
+        stacks.moveBlock(new Step("originStack", "firstStack"));
+        stacks.moveBlock(new Step("originStack", "secondStack"));
 
         System.out.println("Origin Stack is length: " + stacks.getStackStore().get(StacksIF.ORIGIN_STACK).size());
         System.out.println("First Stack is length: " + stacks.getStackStore().get(StacksIF.FIRST_STACK).size());
