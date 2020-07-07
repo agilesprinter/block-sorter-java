@@ -34,28 +34,26 @@ class StacksTest {
         Map<String, List> stackStore = classToTest.getStackStore();
 
         assertTrue(stackStore.keySet().size() == 3);
-        assertTrue(stackStore.keySet().contains("originStack"));
-        assertTrue(stackStore.keySet().contains("firstStack"));
-        assertTrue(stackStore.keySet().contains("secondStack"));
+        assertTrue(stackStore.containsKey("originStack"));
+        assertTrue(stackStore.containsKey("firstStack"));
+        assertTrue(stackStore.containsKey("secondStack"));
     }
 
     @Test
     void moveBlock_easyTest() {
 
         Map<String, List> sackStore = classToTest.getStackStore();
-        List<Block> originStack = sackStore.get("originStack");
-        List<Block> firstStack = sackStore.get("firstStack");
+        List<String> originStack = sackStore.get("originStack");
+        List<String> firstStack = sackStore.get("firstStack");
         //we are getting this stack just to check that it remains empty
-        List<Block> secondStack = sackStore.get("secondStack");
+        List<String> secondStack = sackStore.get("secondStack");
 
-        Block blockA = new Block();
-        blockA.setName("A");
-        originStack.add(blockA);
+        originStack.add("A");
 
-        classToTest.moveBlock("originStack", "firstStack");
+        StacksIF.moveBlock(new Step("originStack", "firstStack"), sackStore);
 
         //The block should have moved from the origin to the firstStack
-        assertEquals(firstStack.get(0), blockA);
+        assertEquals(firstStack.get(0), "A");
         assertTrue(originStack.isEmpty());
         assertTrue(originStack.size() == 0);
         assertTrue(secondStack.isEmpty());

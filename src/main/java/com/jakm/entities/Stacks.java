@@ -35,28 +35,17 @@ public class Stacks implements StacksIF {
     }
 
     @Override
-    public void moveBlock(Step step) {
-        if (step.getFrom() == null) {
-            throw new RuntimeException("The origin stack is empty, cannot move from this stack");
-        }
-        if (step.getTo() == null) {
-            throw new RuntimeException("The target stack is null, cannot move to this stack");
-        }
-        if (!stackStore.containsKey(step.getFrom())) {
-            throw new RuntimeException("The origin stack does not exist, cannot move to this stack");
-        }
-        if (!stackStore.containsKey(step.getTo())) {
-            throw new RuntimeException("The target stack does not exist, cannot move to this stack");
-        }
-        if (stackStore.get(step.getFrom()) == null || stackStore.get(step.getFrom()).size() == 0) {
-            throw new RuntimeException("The from stack is null or empty- we cannot move anything from it");
+    public void seedStack(String stackName, List<String> orderedBlockList) {
+        if (stackName == null || stackStore == null) {
+            throw new RuntimeException("The stack you're trying to initiaize does not exist");
         }
 
-        List<Block> fromStack = getStackStore().get(step.getFrom());
-        List<Block> toStack = getStackStore().get(step.getTo());
+        if (!stackStore.containsKey(stackName)) {
+            throw new RuntimeException("The stack you're trying to initiaize does not exist");
+        }
 
-        Block topOfStackBlock = fromStack.get(fromStack.size() - 1);
-        toStack.add(topOfStackBlock);
-        fromStack.remove(fromStack.size() - 1);
+        //looks safe to initialize with this list of blocks, so go ahead
+        stackStore.get(stackName).add(orderedBlockList);
     }
+
 }

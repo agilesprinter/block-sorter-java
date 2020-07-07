@@ -31,8 +31,8 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldRetunr3() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<String> currentState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
 
         assertEquals(3, classToTest.howFit(targetState, currentState));
 
@@ -42,8 +42,8 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldReturn1() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("A", "C", "B"));
+        List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<String> currentState = new Utils().blockSetCreator(Arrays.asList("A", "C", "B"));
 
         assertEquals(1, classToTest.howFit(targetState, currentState));
 
@@ -53,8 +53,8 @@ public class FitnessFunctionTest {
     @Test
     void howFit_ShouldReturn0() {
 
-        List<Block> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
-        List<Block> currentState = new Utils().blockSetCreator(Arrays.asList("C", "A", "B"));
+        List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
+        List<String> currentState = new Utils().blockSetCreator(Arrays.asList("C", "A", "B"));
 
         assertEquals(0, classToTest.howFit(targetState, currentState));
 

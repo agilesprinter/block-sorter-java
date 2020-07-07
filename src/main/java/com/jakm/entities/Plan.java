@@ -17,21 +17,21 @@ public class Plan {
 
     int planSize;
     int planScore;
-    Map<String, List> realStacks;
-    Map<String, List> assessmentStacks = new HashMap<String, List>();
+    StacksIF realStacks;
+    Map<String, List> scratchPadStacks = new HashMap<String, List>();
     List<String> stackNames;
     List<Step> steps = new ArrayList<Step>();
     private Random rand = new Random();
 
-    public Plan(int planSize, Map<String, List> stacks) {
+    public Plan(int planSize, StacksIF stacks) {
         this.planSize = planSize;
         this.realStacks = stacks;
 
         //initialize this plan's play area
-        this.assessmentStacks.putAll(stacks);
+        this.scratchPadStacks.putAll(stacks.getStackStore());
 
         //set up a handy list for knowing the stack names
-        this.stackNames = new ArrayList(this.assessmentStacks.keySet());
+        this.stackNames = new ArrayList(this.scratchPadStacks.keySet());
     }
 
     /**
@@ -48,7 +48,11 @@ public class Plan {
 
             String from = getNonEmptyFromStack();
 
-            steps.add(i, new Step(from, getAnyToBlockOtherThan(from)));
+            Step step = new Step(from, getAnyToBlockOtherThan(from));
+
+            steps.add(step);
+
+            //now make the change to our set of scratchPadStacks, so only legal moves will be generated in each plan
         }
 
     }
@@ -63,7 +67,7 @@ public class Plan {
         List<String> possibleStacks = new ArrayList<>();
 
         for (String stackName : stackNames) {
-            if (assessmentStacks.get(stackName).size() > 0)
+            if (scratchPadStacks.get(stackName).size() > 0)
                 possibleStacks.add(stackName);
         }
 
@@ -85,7 +89,7 @@ public class Plan {
         return getRandomElementFrom(possibleStacks);
     }
 
-    public String getRandomElementFrom(List<String> selection) {
+    String getRandomElementFrom(List<String> selection) {
         if (selection == null || selection.size() == 0)
             throw new RuntimeException("selection is null, I can't chose a random one from a null list");
 
