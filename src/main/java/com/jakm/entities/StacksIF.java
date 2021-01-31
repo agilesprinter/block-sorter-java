@@ -1,17 +1,13 @@
 package com.jakm.entities;
 
+import com.jakm.interfaces.StackNames;
+
 import java.util.List;
 import java.util.Map;
 
 public interface StacksIF {
 
-    String ORIGIN_STACK = "originStack";
-    String FIRST_STACK = "firstStack";
-    String SECOND_STACK = "secondStack";
-
-    String[] defaultStackNameList = new String[]{ORIGIN_STACK, FIRST_STACK, SECOND_STACK};
-
-    static void moveBlock(Step step, Map<String, List> stacks) {
+    static void moveBlock(Step step, Map<StackNames, List<String>> stacks) {
         if (step.getFrom() == null) {
             throw new RuntimeException("The origin stack is empty, cannot move from this stack");
         }
@@ -36,8 +32,6 @@ public interface StacksIF {
         fromStack.remove(fromStack.size() - 1);
     }
 
-    Map<String, List> getStackStore();
-
-    void seedStack(String stackName, List<String> orderedBlockList);
+    Map<StackNames, List<String>> getStacks();
 
 }

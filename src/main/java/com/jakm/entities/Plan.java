@@ -1,15 +1,22 @@
 package com.jakm.entities;
 
+import com.jakm.interfaces.StackNames;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
 /**
  * A plan is just a series of POSSIBLE steps. Steps such as moving from an empty stack to a full one make no sense.
  * Create a plan with some stacks, then ask it to generate. A random plan of possible moves will be assembled.
+ * <p>
+ * Many plans are generated. Each has its own Stacks object. The Stacks object captures the current state,
+ * the target state and the initial state
  */
 @Setter
 @Getter
@@ -17,21 +24,25 @@ public class Plan {
 
     int planSize;
     int planScore;
-    StacksIF realStacks;
-    Map<String, List> scratchPadStacks = new HashMap<String, List>();
-    List<String> stackNames;
+    Stacks myStacks;
     List<Step> steps = new ArrayList<Step>();
     private Random rand = new Random();
 
-    public Plan(int planSize, StacksIF stacks) {
+    public Plan(int planSize, List<String> initialState, List<String> targetState) {
+
+        if (initialState == null || targetState == null)
+            throw new RuntimeException("Plan cannot be created. Stacks object is null");
+
+        if (initialState.size() != targetState.size()) {
+            throw new RuntimeException("Initial state and target state must have the same number of blocks");
+        }
+
+        if (!initialState.containsAll(targetState)) {
+            throw new RuntimeException("Initial state and target state must have the same block names");
+        }
+
         this.planSize = planSize;
-        this.realStacks = stacks;
-
-        //initialize this plan's play area
-        this.scratchPadStacks.putAll(stacks.getStackStore());
-
-        //set up a handy list for knowing the stack names
-        this.stackNames = new ArrayList(this.scratchPadStacks.keySet());
+        this.myStacks = new Stacks(initialState);
     }
 
     /**
@@ -46,9 +57,9 @@ public class Plan {
 
         for (int i = 0; i < planSize; i++) {
 
-            String from = getNonEmptyFromStack();
+            StackNames from = getNonEmptyFromStack();
 
-            Step step = new Step(from, getAnyToBlockOtherThan(from));
+            Step step = new Step(from, getAnyToStackOtherThan(from));
 
             steps.add(step);
 
@@ -58,17 +69,20 @@ public class Plan {
     }
 
     /**
-     * Get me any stack that I could take a block from
+     * Get me THE NAME OF any stack that I could take a block from
      *
      * @return
      */
-    String getNonEmptyFromStack() {
+    StackNames getNonEmptyFromStack() {
 
-        List<String> possibleStacks = new ArrayList<>();
+        List<StackNames> possibleStacks = new ArrayList<>();
 
-        for (String stackName : stackNames) {
-            if (scratchPadStacks.get(stackName).size() > 0)
-                possibleStacks.add(stackName);
+        for (Map.Entry<StackNames, List<String>> entry : myStacks.getStacks().entrySet()) {
+
+            StackNames stackName = entry.getKey();
+            List<String> stack = entry.getValue();
+
+            if (!stack.isEmpty()) possibleStacks.add(stackName);
         }
 
         return getRandomElementFrom(possibleStacks);
@@ -80,20 +94,23 @@ public class Plan {
      * @param from
      * @return
      */
-    String getAnyToBlockOtherThan(String from) {
+    StackNames getAnyToStackOtherThan(StackNames from) {
 
-        List<String> possibleStacks =
-                stackNames.stream().filter(element -> !element.equals(from))
+        List<StackNames> possibleStacks =
+                myStacks.getStacks().keySet().
+                        stream().filter(element -> !element.equals(from))
                         .collect(Collectors.toList());
 
         return getRandomElementFrom(possibleStacks);
     }
 
-    String getRandomElementFrom(List<String> selection) {
+    StackNames getRandomElementFrom(List<StackNames> selection) {
         if (selection == null || selection.size() == 0)
             throw new RuntimeException("selection is null, I can't chose a random one from a null list");
 
-        return selection.get(rand.nextInt(selection.size()));
+        StackNames stackName = selection.get(rand.nextInt(selection.size()));
+
+        return stackName;
     }
 
 }

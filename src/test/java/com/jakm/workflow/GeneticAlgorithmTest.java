@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class GeneticAlgorithmTest {
@@ -18,7 +19,12 @@ class GeneticAlgorithmTest {
 
     @BeforeEach
     void setUp() {
-        classToTest = new GeneticAlgorithm(new Stacks(), new FitnessFunciton(), new PlanManager());
+        List<String> targetState = Arrays.asList("B", "A", "C");
+        List<String> initialState = Arrays.asList("A", "B", "C");
+
+
+        classToTest = new GeneticAlgorithm(new Stacks(
+                initialState), new FitnessFunciton(), new PlanManager());
     }
 
     @AfterEach

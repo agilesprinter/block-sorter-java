@@ -3,7 +3,7 @@ package com.jakm.workflow;
 import com.jakm.entities.FitnessFunciton;
 import com.jakm.entities.PlanManager;
 import com.jakm.entities.Stacks;
-import com.jakm.entities.StacksIF;
+import com.jakm.interfaces.StackNames;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +32,7 @@ public class GeneticAlgorithm implements GeneticAlgorithmIF {
         //now set the origin stack to be that of the currentState. The current state is the randomly ordered block set
         //that we want to be sorted with the GA
 
-        stacks.getStackStore().put(StacksIF.ORIGIN_STACK, currentState);
+        stacks.getStacks().put(StackNames.ORIGINSTACK, currentState);
 
     }
 

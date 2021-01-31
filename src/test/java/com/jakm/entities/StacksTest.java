@@ -1,63 +1,83 @@
 package com.jakm.entities;
 
+import com.jakm.interfaces.StackNames;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StacksTest {
 
-    private StacksIF classToTest;
+    private Stacks classToTest;
 
     @BeforeEach
     void setUp() {
 
-        Set<String> stackList = new HashSet<>();
+        List<String> initialState = Arrays.asList("A", "B", "C");
 
-        stackList.add("originStack");
-        stackList.add("firstStack");
-        stackList.add("secondStack");
+        classToTest = new Stacks(initialState);
+    }
 
-        classToTest = new Stacks(stackList);
+    @Test
+    void doesExtractionWorkCorrectly() {
+
+        assertTrue(classToTest.getStacks().keySet() != null);
+        List<String> originStack = classToTest.getStacks().get(StackNames.ORIGINSTACK);
+        assertTrue(originStack != null);
+        assertTrue(originStack.size() != 0);
+        assertFalse(originStack.isEmpty());
+
+
+        List<String> firstStack = classToTest.getStacks().get(StackNames.FIRSTSTACK);
+        assertTrue(firstStack != null);
+        assertTrue(firstStack.size() == 0);
+        assertTrue(firstStack.isEmpty());
+
+        List<String> secondStack = classToTest.getStacks().get(StackNames.SECONDSTACK);
+        assertTrue(secondStack != null);
+        assertTrue(secondStack.size() == 0);
+        assertTrue(secondStack.isEmpty());
+
     }
 
 
     @Test
     void constructoir_ensureStacksAndLabelsAreSetUp() {
 
-        Map<String, List> stackStore = classToTest.getStackStore();
+        Map<StackNames, List<String>> stacks = classToTest.getStacks();
 
-        assertTrue(stackStore.keySet().size() == 3);
-        assertTrue(stackStore.containsKey("originStack"));
-        assertTrue(stackStore.containsKey("firstStack"));
-        assertTrue(stackStore.containsKey("secondStack"));
+        assertTrue(stacks.keySet().size() == 3);
+        assertTrue(stacks.containsKey(StackNames.ORIGINSTACK));
+        assertTrue(stacks.containsKey(StackNames.FIRSTSTACK));
+        assertTrue(stacks.containsKey(StackNames.SECONDSTACK));
     }
 
     @Test
     void moveBlock_easyTest() {
 
-        Map<String, List> sackStore = classToTest.getStackStore();
-        List<String> originStack = sackStore.get("originStack");
-        List<String> firstStack = sackStore.get("firstStack");
+        //Testing our own object here- away from the one created for us
+        List<String> initialState = Arrays.asList("A");
+        StacksIF stacks = new Stacks(initialState);
+
+        Map<StackNames, List<String>> stackMap = stacks.getStacks();
+        List<String> originStack = stackMap.get(StackNames.ORIGINSTACK);
+        List<String> firstStack = stackMap.get(StackNames.FIRSTSTACK);
         //we are getting this stack just to check that it remains empty
-        List<String> secondStack = sackStore.get("secondStack");
+        List<String> secondStack = stackMap.get(StackNames.SECONDSTACK);
 
-        originStack.add("A");
-
-        StacksIF.moveBlock(new Step("originStack", "firstStack"), sackStore);
+        StacksIF.moveBlock(new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK), stackMap);
 
         //The block should have moved from the origin to the firstStack
         assertEquals(firstStack.get(0), "A");
         assertTrue(originStack.isEmpty());
-        assertTrue(originStack.size() == 0);
+        assertEquals(0, originStack.size());
         assertTrue(secondStack.isEmpty());
-        assertTrue(secondStack.size() == 0);
+        assertEquals(0, secondStack.size());
 
     }
+
 }
