@@ -1,14 +1,15 @@
 package com.jakm.entities;
 
+import com.jakm.interfaces.StackNames;
 import lombok.Getter;
 
 @Getter
 public class Step {
 
-    String from;
-    String to;
+    StackNames from;
+    StackNames to;
 
-    public Step(String from, String to) {
+    public Step(StackNames from, StackNames to) {
 
         if (from == null || to == null)
             throw new UnsupportedOperationException("You must provide from and to directions");

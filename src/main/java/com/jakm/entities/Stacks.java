@@ -1,62 +1,44 @@
 package com.jakm.entities;
 
-import java.util.*;
+import com.jakm.interfaces.StackNames;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Stacks implements StacksIF {
 
-    private final Map<String, List> stackStore;
+    private final List<String> originStack;
+    private final List<String> firstStack;
+    private final List<String> secondStack;
+    private final Map<StackNames, List<String>> stacks;
 
-    public Stacks(Set<String> stackNameList) {
+    private final List<String> initialState;
 
-        stackStore = new HashMap<>();
+    public Stacks(List initialState) {
 
-        for (String stack : stackNameList) {
-            //Each stack is just an ordered list of Steps
-            stackStore.put(stack, new <Step>ArrayList());
+        this.initialState = initialState;
+
+        if (initialState == null) {
+            throw new RuntimeException("One of the stacks you're trying to initiaize does not exist");
         }
+
+        originStack = new ArrayList<>();
+        firstStack = new ArrayList<>();
+        secondStack = new ArrayList<>();
+        stacks = new HashMap<StackNames, List<String>>();
+
+        stacks.put(StackNames.ORIGINSTACK, originStack);
+        stacks.put(StackNames.FIRSTSTACK, firstStack);
+        stacks.put(StackNames.SECONDSTACK, secondStack);
+
+        //set up the origin stack so it looks like the problem statement
+        originStack.addAll(initialState);
     }
 
-    /*
-    If you do not provide stack names, you will get 3
-     */
-    public Stacks() {
-
-        stackStore = new HashMap<>();
-
-        for (String stack : defaultStackNameList) {
-            stackStore.put(stack, new ArrayList());
-        }
-    }
-
-    @Override
-    public Map<String, List> getStackStore() {
-        return stackStore;
-    }
-
-    @Override
-    public void moveBlock(Step step) {
-        if (step.getFrom() == null) {
-            throw new RuntimeException("The origin stack is empty, cannot move from this stack");
-        }
-        if (step.getTo() == null) {
-            throw new RuntimeException("The target stack is null, cannot move to this stack");
-        }
-        if (!stackStore.containsKey(step.getFrom())) {
-            throw new RuntimeException("The origin stack does not exist, cannot move to this stack");
-        }
-        if (!stackStore.containsKey(step.getTo())) {
-            throw new RuntimeException("The target stack does not exist, cannot move to this stack");
-        }
-        if (stackStore.get(step.getFrom()) == null || stackStore.get(step.getFrom()).size() == 0) {
-            throw new RuntimeException("The from stack is null or empty- we cannot move anything from it");
-        }
-
-        List<Block> fromStack = getStackStore().get(step.getFrom());
-        List<Block> toStack = getStackStore().get(step.getTo());
-
-        Block topOfStackBlock = fromStack.get(fromStack.size() - 1);
-        toStack.add(topOfStackBlock);
-        fromStack.remove(fromStack.size() - 1);
+    public Map<StackNames, List<String>> getStacks() {
+        return stacks;
     }
 }
