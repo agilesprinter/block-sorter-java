@@ -1,13 +1,16 @@
 package com.jakm.entities;
 
 import com.jakm.interfaces.StackNames;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@Getter
+@Setter
 public class Stacks implements StacksIF {
 
     private final List<String> originStack;
@@ -38,7 +41,4 @@ public class Stacks implements StacksIF {
         originStack.addAll(initialState);
     }
 
-    public Map<StackNames, List<String>> getStacks() {
-        return stacks;
-    }
 }
