@@ -41,4 +41,22 @@ public class Stacks implements StacksIF {
         originStack.addAll(initialState);
     }
 
+    public void applyStep(Step step) {
+
+        List<String> fromStack = stacks.get(step.from);
+        List<String> toStack = stacks.get(step.to);
+
+        toStack.add(fromStack.get(this.getTopBlockIndex(step.from)));
+
+        fromStack.remove(this.getTopBlockIndex(step.from));
+
+    }
+
+    public int getTopBlockIndex(StackNames stackNames) {
+        List<String> stack = stacks.get(stackNames);
+
+        if (stack.isEmpty()) return -1;
+
+        return stack.size() - 1;
+    }
 }

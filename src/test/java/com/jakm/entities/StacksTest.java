@@ -23,6 +23,67 @@ class StacksTest {
     }
 
     @Test
+    void doesApplyStepMoveBlocks() {
+
+        assertEquals(3, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        classToTest.applyStep(step1);
+
+        assertEquals(2, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(1, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        Step step2 = new Step(StackNames.FIRSTSTACK, StackNames.SECONDSTACK);
+        classToTest.applyStep(step2);
+
+        assertEquals(2, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(1, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+    }
+
+    @Test
+    void doesApplyStepMoveBlocksFromTopOnly() {
+
+        //The top of a stack is the end of the list. The bottom is the element at index 0
+
+        assertEquals(3, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        classToTest.applyStep(step1);
+
+        assertEquals(2, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(1, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        assertEquals("B", classToTest.getStacks().get(StackNames.ORIGINSTACK)
+                .get(classToTest.getStacks().get(StackNames.ORIGINSTACK).size() - 1));
+
+        assertEquals("C", classToTest.getStacks().get(StackNames.FIRSTSTACK)
+                .get(classToTest.getStacks().get(StackNames.FIRSTSTACK).size() - 1));
+
+        Step step2 = new Step(StackNames.FIRSTSTACK, StackNames.SECONDSTACK);
+        classToTest.applyStep(step2);
+
+        assertEquals(2, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(1, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        assertEquals("B", classToTest.getStacks().get(StackNames.ORIGINSTACK)
+                .get(classToTest.getTopBlockIndex(StackNames.ORIGINSTACK)));
+
+        assertEquals("C", classToTest.getStacks().get(StackNames.SECONDSTACK)
+                .get(classToTest.getTopBlockIndex(StackNames.SECONDSTACK)));
+
+    }
+
+
+    @Test
     void doesExtractionWorkCorrectly() {
 
         assertTrue(classToTest.getStacks().keySet() != null);

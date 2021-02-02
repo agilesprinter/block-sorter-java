@@ -18,4 +18,8 @@ public class Step {
         this.to = to;
     }
 
+    public String toString() {
+        return from + " -> " + to;
+    }
+
 }

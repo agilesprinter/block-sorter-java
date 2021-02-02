@@ -53,7 +53,7 @@ public class Plan {
      *
      * @return
      */
-    void generatePlan() {
+    void generateAndRunPlan() {
 
         for (int i = 0; i < planSize; i++) {
 
@@ -61,10 +61,19 @@ public class Plan {
 
             Step step = new Step(from, getAnyToStackOtherThan(from));
 
+            //we must apply the step each time to ensure the next steps which are generated
+            //will keep making sense.
+            myStacks.applyStep(step);
+
+            //keep a record of the steps that we are generating
             steps.add(step);
 
-            //now make the change to our set of scratchPadStacks, so only legal moves will be generated in each plan
+            //now make the change to our set of scratchPadStacks, so only legal
+            // moves will be generated in each plan
+
+            System.out.println(step + "\n");
         }
+
 
     }
 
