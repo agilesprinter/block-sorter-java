@@ -31,6 +31,7 @@ public class PlanTest {
     @Test
     void generatePlan_shouldGenerateARandomPlan() {
 
+        //the plan moves around its blocks as it creates the plan
         classToTest.generateAndRunPlan();
 
         Assert.assertEquals(10, classToTest.getSteps().size());
