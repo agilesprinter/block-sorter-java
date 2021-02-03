@@ -1,7 +1,6 @@
 package com.jakm.config;
 
 import com.jakm.entities.FitnessFunciton;
-import com.jakm.entities.PlanManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,11 +23,10 @@ public class AppConfig {
         return new FitnessFunciton();
     }
 
-    @Bean(name = "planManager")
-    public PlanManager getPlanManager() {
-        return new PlanManager();
-    }
-
+    /*@Bean(name = "generation")
+    public Generation getPlanManager() {
+        return new Generation();
+    }*/
 
 
 }

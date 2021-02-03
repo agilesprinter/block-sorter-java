@@ -19,6 +19,7 @@ public class FitnessFunciton {
 
     public int getPositionSimilarity(List<String> targetState, List<String> currentState, int rawScore) {
         int examinedPosition = 0;
+        //Loop through the current state and see if each block matches the block at the target position
         for (String currentBlock : currentState) {
             //if the target state doesn't have a block at our current position, we may as well stop checking
             if (targetState.size() - 1 < examinedPosition) break;

@@ -3,14 +3,14 @@ package com.jakm.entities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PlanManagerTest {
+public class GenerationTest {
 
-    private PlanManager classToTest;
+    private Generation classToTest;
 
     @BeforeEach
     void setUp() {
 
-        classToTest = new PlanManager();
+        //classToTest = new Generation();
     }
 
 
