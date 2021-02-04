@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Getter
 public class Generation {
@@ -31,7 +32,14 @@ public class Generation {
 
     public void createPlans() {
 
-        //IntStream.range(0, howManyPlans).forEach(i -> plans.add(new Plan(lengthOfEachPlan, stacks)));
+        //checking that the plans really are empty. If so, create them- this is the first generation
+        if (plans.isEmpty()) {
+            IntStream.range(0, howManyPlans).forEach(i -> plans.add(
+                    new Plan(maxLengthOfEachPlan, initialState, targetState)));
+        }
+    }
+
+    public void runGeneration() {
 
     }
 
