@@ -53,7 +53,7 @@ public class Plan {
      *
      * @return
      */
-    void generateAndRunPlan() {
+    void generateAndRunNewPlan() {
 
         for (int i = 0; i < planSize; i++) {
 
@@ -120,6 +120,22 @@ public class Plan {
         StackNames stackName = selection.get(rand.nextInt(selection.size()));
 
         return stackName;
+    }
+
+    void combinePlans(Plan otherPlan) {
+
+        int splitIndex = this.steps.size() / 2;
+
+        //remove half of the steps in our plan starting from the end
+        for (int i = this.steps.size() - 1; i >= splitIndex; i--) {
+            this.steps.remove(i);
+        }
+
+        //replace those steps with half of those in the incoming plan
+        for (int j = splitIndex; j < otherPlan.getSteps().size(); j++) {
+            this.steps.add(otherPlan.getSteps().get(j));
+        }
+
     }
 
 }
