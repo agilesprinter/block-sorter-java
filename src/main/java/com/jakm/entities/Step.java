@@ -2,8 +2,10 @@ package com.jakm.entities;
 
 import com.jakm.interfaces.StackNames;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class Step {
 
     StackNames from;

@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface MutatorIF {
 
-    void mutate(List<Step> steps);
+    void mutate(List<Step> steps, int numberOfMutations);
 }
