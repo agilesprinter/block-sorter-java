@@ -2,6 +2,7 @@ package com.jakm.entities;
 
 import com.jakm.interfaces.StackNames;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -12,10 +13,23 @@ public class MutatorFlip implements MutatorIF {
         if (steps == null || steps.isEmpty()) throw new RuntimeException("I cannot mutate a list of empty Steps");
 
         Random rand = new Random();
+        List<Integer> flipPositions = new ArrayList();
+        int numberOfFlips = numberOfMutations;
 
-        while (numberOfMutations > 0) {
+        while (numberOfFlips > 0) {
 
-            Step stepToFlip = steps.get(rand.nextInt(steps.size()));
+            Integer positionToFlip = rand.nextInt(steps.size());
+
+            if (flipPositions.contains(positionToFlip)) continue;
+
+            flipPositions.add(positionToFlip);
+
+            numberOfFlips--;
+        }
+
+        for (Integer flipIndex : flipPositions) {
+
+            Step stepToFlip = steps.get(flipIndex);
 
             StackNames from = stepToFlip.getFrom();
             StackNames to = stepToFlip.getTo();
@@ -24,7 +38,6 @@ public class MutatorFlip implements MutatorIF {
             stepToFlip.setFrom(to);
             stepToFlip.setTo(from);
 
-            numberOfMutations--;
         }
 
     }

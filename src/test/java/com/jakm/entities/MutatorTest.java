@@ -72,4 +72,35 @@ class MutatorTest {
         assertEquals(2, notFlipped);
         assertEquals(2, flipped);
     }
+
+    @Test
+    void canWeFlipOAllSteps() {
+        Step step1 = new Step(StackNames.FIRSTSTACK, StackNames.ORIGINSTACK);
+        Step step2 = new Step(StackNames.FIRSTSTACK, StackNames.ORIGINSTACK);
+        Step step3 = new Step(StackNames.FIRSTSTACK, StackNames.ORIGINSTACK);
+        Step step4 = new Step(StackNames.FIRSTSTACK, StackNames.ORIGINSTACK);
+
+        List<Step> steps = new ArrayList<>(Arrays.asList(step1, step2, step3, step4));
+
+        MutatorIF mutatorFlip = new MutatorFlip();
+
+        mutatorFlip.mutate(steps, 4);
+
+        assertEquals(4, steps.size());
+
+        int flipped = 0;
+        int notFlipped = 0;
+
+        for (Step step : steps) {
+            if (step.from.equals(StackNames.ORIGINSTACK)
+                    && step.to.equals(StackNames.FIRSTSTACK)) {
+                flipped++;
+            } else {
+                notFlipped++;
+            }
+        }
+
+        assertEquals(0, notFlipped);
+        assertEquals(4, flipped);
+    }
 }
