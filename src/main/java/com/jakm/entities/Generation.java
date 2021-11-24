@@ -68,11 +68,62 @@ public class Generation {
     }
 
     List<Plan> matePlans(List<Plan> parents) {
+
+        if (parents == null) return null;
+
         List<Plan> matedPlans = new ArrayList<>();
+
+        //each set of parent should have the same number of children to preserve population size
+        for (int i = 0; i < parents.size() / 2; i++) {
+            Plan parent1 = parents.get(i);
+            Plan parent2 = parents.get(matedPlans.size() - i);
+            Plan child1 = matePlansSimple(parent1, parent2);
+            Plan child2 = matePlansMix(parent1, parent2);
+            matedPlans.add(child1);
+            matedPlans.add(child2);
+        }
 
         return matedPlans;
     }
 
+    Plan matePlansSimple(Plan parent1, Plan parent2) {
+        //child inherits plan size, initial state and target state from parent
+        Plan child = new Plan(parent1.getPlanSize(), parent1.getInitialState(), parent1.getTargetState());
+        List<Step> childSteps = new ArrayList<>();
+
+        for (int i = 0; i < Math.floor(parent1.getSteps().size() / 2); i++) {
+            childSteps.add(parent1.getSteps().get(i));
+        }
+
+        double secondSectionStartIndex = Math.ceil(parent2.getSteps().size() / 2);
+        int countStart = new Double(secondSectionStartIndex).intValue();
+
+        for (int i = countStart; i < parent2.getSteps().size(); i++) {
+            childSteps.add(parent2.getSteps().get(i));
+        }
+
+        child.setSteps(childSteps);
+
+        return child;
+    }
+
+    Plan matePlansMix(Plan parent1, Plan parent2) {
+
+        //child inherits plan size, initial state and target state from parent
+        Plan child = new Plan(parent1.getPlanSize(), parent1.getInitialState(), parent1.getTargetState());
+        List<Step> childSteps = new ArrayList<>();
+
+        for (int i = 0; i < parent1.getSteps().size(); i++) {
+            if (i % 2 == 0) {
+                childSteps.add(parent1.getSteps().get(i));
+            } else {
+                childSteps.add(parent2.getSteps().get(i));
+            }
+        }
+
+        child.setSteps(childSteps);
+        return child;
+    }
 
     List<Plan> getBestPlans(int percentageOfBest) {
 

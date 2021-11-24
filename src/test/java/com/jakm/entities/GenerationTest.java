@@ -191,8 +191,6 @@ public class GenerationTest {
         List<String> initialState = Arrays.asList("B", "A", "C");
         List<String> targetState = Arrays.asList("A", "B", "C");
 
-        classToTest = new Generation(plans, initialState, targetState, 2, 4);
-
         Plan firstPlan = new Plan(4, initialState, targetState);
         Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
         Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
@@ -221,9 +219,178 @@ public class GenerationTest {
         parents.add(firstPlan);
         parents.add(secondPlan);
 
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
         List<Plan> matedPlans = classToTest.matePlans(parents);
 
-        //assertEquals(matedPlans.size(), 2);
+        assertEquals(matedPlans.size(), 2);
+
+    }
+
+    @Test
+    void mateFourSimplePlans() {
+
+        List<String> initialState = Arrays.asList("B", "A", "C");
+        List<String> targetState = Arrays.asList("A", "B", "C");
+
+        Plan firstPlan = new Plan(4, initialState, targetState);
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps1 = new ArrayList<>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+        firstPlan.setSteps(steps1);
+
+        Plan secondPlan = new Plan(4, initialState, targetState);
+        Step step5 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step6 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step7 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step8 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps2 = new ArrayList<>();
+        steps2.add(step5);
+        steps2.add(step6);
+        steps2.add(step7);
+        steps2.add(step8);
+        secondPlan.setSteps(steps2);
+
+        Plan thirdPlan = new Plan(4, initialState, targetState);
+        Step step9 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step10 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step11 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step12 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps3 = new ArrayList<>();
+        steps3.add(step9);
+        steps3.add(step10);
+        steps3.add(step11);
+        steps3.add(step12);
+        thirdPlan.setSteps(steps3);
+
+        Plan fourthPlan = new Plan(4, initialState, targetState);
+        Step step13 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step14 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step15 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step16 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps4 = new ArrayList<>();
+        steps4.add(step13);
+        steps4.add(step14);
+        steps4.add(step15);
+        steps4.add(step16);
+        fourthPlan.setSteps(steps4);
+
+        List<Plan> parents = new ArrayList();
+        parents.add(firstPlan);
+        parents.add(secondPlan);
+        parents.add(thirdPlan);
+        parents.add(fourthPlan);
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        List<Plan> matedPlans = classToTest.matePlans(parents);
+
+        assertEquals(matedPlans.size(), 4);
+
+    }
+
+    @Test
+    void mateNullPlans() {
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        List<Plan> matedPlans = classToTest.matePlans(null);
+
+        assertNull(matedPlans);
+
+    }
+
+    @Test
+    void matePlansSimple() {
+        List<String> initialState = Arrays.asList("B", "A", "C");
+        List<String> targetState = Arrays.asList("A", "B", "C");
+
+        Plan firstPlan = new Plan(4, initialState, targetState);
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps1 = new ArrayList<>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+        firstPlan.setSteps(steps1);
+
+        Plan secondPlan = new Plan(4, initialState, targetState);
+        Step step5 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step6 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step7 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step8 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps2 = new ArrayList<>();
+        steps2.add(step5);
+        steps2.add(step6);
+        steps2.add(step7);
+        steps2.add(step8);
+        secondPlan.setSteps(steps2);
+
+        //mating simple plans should take the first half of entries from the first plan, and the second half from the second
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        Plan child = classToTest.matePlansSimple(firstPlan, secondPlan);
+
+        assertEquals(4, child.getSteps().size());
+
+        assertEquals(step1, child.getSteps().get(0));
+        assertEquals(step2, child.getSteps().get(1));
+        assertEquals(step7, child.getSteps().get(2));
+        assertEquals(step8, child.getSteps().get(3));
+
+    }
+
+    @Test
+    void matePlansMixed() {
+        List<String> initialState = Arrays.asList("B", "A", "C");
+        List<String> targetState = Arrays.asList("A", "B", "C");
+
+        Plan firstPlan = new Plan(4, initialState, targetState);
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps1 = new ArrayList<>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+        firstPlan.setSteps(steps1);
+
+        Plan secondPlan = new Plan(4, initialState, targetState);
+        Step step5 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step6 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step7 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        Step step8 = new Step(StackNames.SECONDSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps2 = new ArrayList<>();
+        steps2.add(step5);
+        steps2.add(step6);
+        steps2.add(step7);
+        steps2.add(step8);
+        secondPlan.setSteps(steps2);
+
+        //mating simple plans should take the first half of entries from the first plan, and the second half from the second
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        Plan child = classToTest.matePlansMix(firstPlan, secondPlan);
+
+        assertEquals(4, child.getSteps().size());
+
+        assertEquals(step1, child.getSteps().get(0));
+        assertEquals(step6, child.getSteps().get(1));
+        assertEquals(step3, child.getSteps().get(2));
+        assertEquals(step8, child.getSteps().get(3));
 
     }
 

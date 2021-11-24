@@ -24,6 +24,8 @@ public class Plan {
 
     int planSize;
     int planScore;
+    List<String> initialState;
+    List<String> targetState;
     Stacks myStacks;
     List<Step> steps = new ArrayList<Step>();
     private Random rand = new Random();
@@ -42,6 +44,8 @@ public class Plan {
         }
 
         this.planSize = planSize;
+        this.initialState = initialState;
+        this.targetState = targetState;
         this.myStacks = new Stacks(initialState);
     }
 
