@@ -24,4 +24,12 @@ public class Step {
         return from + " -> " + to;
     }
 
+    public void mutate() {
+        StackNames oldFrom = from;
+        StackNames oldTo = to;
+
+        setFrom(oldTo);
+        setTo(oldFrom);
+    }
+
 }
