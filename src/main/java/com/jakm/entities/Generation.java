@@ -35,13 +35,14 @@ public class Generation {
 
     }
 
-    public void createPlans() {
+    public List<Plan> createPlans(int howManyPlans) {
 
-        //checking that the plans really are empty. If so, create them- this is the first generation
-        if (plans.isEmpty()) {
-            IntStream.range(0, howManyPlans).forEach(i -> plans.add(
-                    new Plan(maxLengthOfEachPlan, initialState, targetState)));
-        }
+        List<Plan> plans = new ArrayList<>();
+        IntStream.range(0, howManyPlans).forEach(i -> plans.add(
+                new Plan(maxLengthOfEachPlan, initialState, targetState)));
+
+        return plans;
+
     }
 
     public void runGeneration(int percentageOfBest, int percentageOfWorst, int numberOfMutations, int percentageToMutate) {
@@ -61,10 +62,35 @@ public class Generation {
         parents.addAll(worstPlans);
 
         //mate the selected plans
-        List<Plan> nextGeneration = matePlans(parents);
+        List<Plan> newChildren = matePlans(parents);
+
+        //identify the best 10 plans from the last generation and let them pass into the next
+        //generation unchanged
+        List<Plan> preservedPlans = getPlansToPreserve(bestPlans, 10);
+
+        List<Plan> nextGeneration = new ArrayList<>();
+        nextGeneration.addAll(preservedPlans);
+        nextGeneration.addAll(newChildren);
+
+        //fill nextGeneration with new plans so the generation size remains constant
+        int numberOfNewPlansNeeded = nextGeneration.size() - getHowManyPlans();
+
+        List<Plan> brandNewPlans = createPlans(numberOfNewPlansNeeded);
+
+        nextGeneration.addAll(brandNewPlans);
 
         //perform mutations on a percentage of the children
 
+    }
+
+    private List<Plan> getPlansToPreserve(List<Plan> bestPlans, int numberToPreserve) {
+
+        List<Plan> preservedPlans = new ArrayList<>();
+        for (int i = 0; i < numberToPreserve || i < bestPlans.size() - 1; i++) {
+            preservedPlans.add(bestPlans.get(i));
+        }
+
+        return preservedPlans;
     }
 
     List<Plan> matePlans(List<Plan> parents) {

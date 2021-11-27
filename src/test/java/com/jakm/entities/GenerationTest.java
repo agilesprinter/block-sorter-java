@@ -34,9 +34,9 @@ public class GenerationTest {
 
         classToTest = new Generation(plans, initialState, targetState, 100, 10);
 
-        classToTest.createPlans();
+        List<Plan> plans = classToTest.createPlans(100);
 
-        assertEquals(100, classToTest.getPlans().size());
+        assertEquals(100, plans.size());
 
     }
 
