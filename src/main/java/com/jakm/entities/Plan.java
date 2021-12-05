@@ -142,4 +142,8 @@ public class Plan {
 
     }
 
+    void mutate() {
+
+    }
+
 }

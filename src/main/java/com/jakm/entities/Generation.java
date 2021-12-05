@@ -79,11 +79,28 @@ public class Generation {
 
         nextGeneration.addAll(brandNewPlans);
 
-        //perform mutations on a percentage of the children
+        //perform mutations on a percentage of this next Generation
+
 
     }
 
-    private List<Plan> getPlansToPreserve(List<Plan> bestPlans, int numberToPreserve) {
+    void mutateGeneration(int percentageToMutate, List<Plan> generationToMutate) {
+
+        if (percentageToMutate == 0) return;
+
+        if (generationToMutate == null || generationToMutate.size() == 0) return;
+
+        float mutationTarget = (generationToMutate.size() / percentageToMutate) * 100;
+
+        int numberOfPlansToMutate = (int) mutationTarget;
+
+        IntStream.range(0, numberOfPlansToMutate).forEach(i -> generationToMutate.get(i).mutate());
+
+
+    }
+
+
+    List<Plan> getPlansToPreserve(List<Plan> bestPlans, int numberToPreserve) {
 
         List<Plan> preservedPlans = new ArrayList<>();
         for (int i = 0; i < numberToPreserve || i < bestPlans.size() - 1; i++) {

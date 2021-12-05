@@ -394,4 +394,32 @@ public class GenerationTest {
 
     }
 
+    @Test
+    void mutateNoChildren() {
+
+        List<String> initialState = Arrays.asList("B", "A", "C");
+        List<String> targetState = Arrays.asList("A", "B", "C");
+
+        Plan firstPlan = new Plan(4, initialState, targetState);
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps1 = new ArrayList<>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+        firstPlan.setSteps(steps1);
+
+        List<Plan> testGeneration = new ArrayList<>();
+        testGeneration.add(firstPlan);
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        classToTest.mutateGeneration(100, testGeneration);
+
+
+    }
+
 }
