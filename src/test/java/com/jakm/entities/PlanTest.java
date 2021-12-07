@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -133,6 +135,59 @@ public class PlanTest {
         assertEquals(step2, classToTest.getSteps().get(1));
         assertEquals(step7, classToTest.getSteps().get(2));
         assertEquals(step8, classToTest.getSteps().get(3));
+
+    }
+
+    @Test
+    void mutateOneStepInPlan() {
+
+        List<String> initialState1 = Arrays.asList("A", "B", "C", "D");
+        List<String> targetState1 = Arrays.asList("A", "B", "C", "D");
+
+        classToTest = new Plan(10, initialState1, targetState1);
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+
+        List<Step> steps1 = new ArrayList<Step>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+
+        classToTest.setSteps(steps1);
+
+        classToTest.mutate();
+
+        //now we expect that one and only one of the steps in classToTest has FirstStack as its 'from' member
+        List<StackNames> fromPositions = new ArrayList<>();
+
+        //collect all of the 'from' values from each of our steps
+        IntStream.range(0, steps1.size()).forEach(i -> fromPositions.add(steps1.get(i).getFrom()));
+
+        //we set them up with ORIGINSTACK in the from value, so with a mutation, ONE should be FIRSTSTACK
+        assertTrue(fromPositions.contains(StackNames.FIRSTSTACK));
+
+        //and of course this should only have happened one time
+        int countOfOriginFromPositions = Collections.frequency(fromPositions, StackNames.ORIGINSTACK);
+        assertEquals(3, countOfOriginFromPositions);
+
+    }
+
+    @Test
+    void mutatorShouldThrowException() {
+
+        List<String> initialState1 = Arrays.asList("A", "B", "C", "D");
+        List<String> targetState1 = Arrays.asList("A", "B", "C", "D");
+
+        classToTest = new Plan(10, initialState1, targetState1);
+
+        classToTest.setMutators(null);
+
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            classToTest.mutate();
+        });
 
     }
 

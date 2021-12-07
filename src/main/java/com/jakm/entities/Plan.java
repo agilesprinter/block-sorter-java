@@ -3,6 +3,7 @@ package com.jakm.entities;
 import com.jakm.interfaces.StackNames;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class Plan {
     Stacks myStacks;
     List<Step> steps = new ArrayList<Step>();
     private Random rand = new Random();
+    private List<MutatorIF> mutators = new ArrayList();
 
     public Plan(int planSize, List<String> initialState, List<String> targetState) {
 
@@ -47,6 +49,8 @@ public class Plan {
         this.initialState = initialState;
         this.targetState = targetState;
         this.myStacks = new Stacks(initialState);
+
+        this.mutators.add(new MutatorFlip());
     }
 
     /**
@@ -143,6 +147,12 @@ public class Plan {
     }
 
     void mutate() {
+        //I think here we should have a collection of mutation strategies
+        //and this method (which should be on the plan class), should ask for mutations
+        if (CollectionUtils.isEmpty(this.mutators))
+            throw new UnsupportedOperationException("Every plan must have at least one Mutator");
+
+        this.mutators.get(0).mutate(this.steps, 1);
 
     }
 

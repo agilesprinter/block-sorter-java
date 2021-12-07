@@ -422,4 +422,21 @@ public class GenerationTest {
 
     }
 
+    @Test
+    void plansToReserveShouldReturnCorrectNumber() {
+        List<Plan> testPlans = new ArrayList<>();
+        Plan firstPlan = new Plan(4, initialState, targetState);
+        Plan secondPlan = new Plan(4, initialState, targetState);
+
+        testPlans.add(firstPlan);
+        testPlans.add(secondPlan);
+
+        classToTest = new Generation(plans, initialState, targetState, 2, 4);
+
+        List<Plan> returnedPlans = classToTest.getPlansToPreserve(testPlans, 1);
+
+        assertEquals(1, returnedPlans.size());
+
+    }
+
 }
