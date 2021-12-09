@@ -31,7 +31,7 @@ public class Generation {
         this.maxLengthOfEachPlan = maxLengthOfEachPlan;
 
         //this is the first generation, so we need to create an object for the Plans
-        if (this.plans == null) this.plans = new ArrayList<Plan>();
+        if (this.plans == null) this.plans = createPlans(this.howManyPlans);
 
     }
 
@@ -80,7 +80,7 @@ public class Generation {
         nextGeneration.addAll(brandNewPlans);
 
         //perform mutations on a percentage of this next Generation
-
+        mutateGeneration(20, nextGeneration);
 
     }
 

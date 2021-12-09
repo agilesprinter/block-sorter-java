@@ -76,10 +76,6 @@ public class Plan {
             //keep a record of the steps that we are generating
             steps.add(step);
 
-            //now make the change to our set of scratchPadStacks, so only legal
-            // moves will be generated in each plan
-
-            System.out.println(step + "\n");
         }
 
 
@@ -152,6 +148,7 @@ public class Plan {
         if (CollectionUtils.isEmpty(this.mutators))
             throw new UnsupportedOperationException("Every plan must have at least one Mutator");
 
+        //just assume 1 mutator for now. We can add more later
         this.mutators.get(0).mutate(this.steps, 1);
 
     }

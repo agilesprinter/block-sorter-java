@@ -1,7 +1,5 @@
 package com.jakm.entities;
 
-import com.jakm.interfaces.StackNames;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,12 +29,8 @@ public class MutatorFlip implements MutatorIF {
 
             Step stepToFlip = steps.get(flipIndex);
 
-            StackNames from = stepToFlip.getFrom();
-            StackNames to = stepToFlip.getTo();
-
             //flip the order for the relevant step
-            stepToFlip.setFrom(to);
-            stepToFlip.setTo(from);
+            stepToFlip.mutate();
 
         }
 
