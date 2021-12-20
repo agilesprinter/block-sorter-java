@@ -2,10 +2,12 @@ package com.jakm.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
@@ -31,7 +33,7 @@ public class Generation {
         this.maxLengthOfEachPlan = maxLengthOfEachPlan;
 
         //this is the first generation, so we need to create an object for the Plans
-        if (this.plans == null) this.plans = createPlans(this.howManyPlans);
+        if (CollectionUtils.isEmpty(this.plans)) this.plans = createPlans(this.howManyPlans);
 
     }
 
@@ -45,9 +47,29 @@ public class Generation {
 
     }
 
-    public void runGeneration(int percentageOfBest, int percentageOfWorst, int numberOfMutations, int percentageToMutate) {
+    public List<Plan> run() {
 
-        List<Plan> selectedPlans = new ArrayList<Plan>();
+        for (int i = 0; i < 100; i++) {
+            List<Plan> successfulPlans =
+                    this.plans.stream().filter(plan -> plan.getPlanScore() == 100)
+                            .collect(Collectors.toList());
+
+            if (!CollectionUtils.isEmpty(successfulPlans)) {
+                System.out.println("Winner winner on generation " + i + "!!");
+                System.out.println(successfulPlans);
+                //no need to continue here, we found a winning plan
+                return successfulPlans;
+            }
+
+            runGeneration(20, 10, 1, 10);
+
+        }
+
+        return null;
+
+    }
+
+    public void runGeneration(int percentageOfBest, int percentageOfWorst, int numberOfMutations, int percentageToMutate) {
 
         //sort the plans first.
         this.plans.sort(Comparator.comparing(Plan::getPlanScore));
@@ -82,6 +104,23 @@ public class Generation {
         //perform mutations on a percentage of this next Generation
         mutateGeneration(20, nextGeneration);
 
+        //exectute and score all the plans
+        nextGeneration.forEach(plan -> plan.executeAndScorePlan());
+
+        this.plans = nextGeneration;
+
+        //generation complete. Calling method should try a new generation if no plan is 100% successful.
+
+        //temporary debug to see what is happening
+        this.plans.sort(Comparator.comparing(Plan::getPlanScore));
+        System.out.println("Top score is: " + this.plans.get(0).getPlanScore());
+        System.out.println(this.plans.get(0).getSteps().toString());
+        System.out.println("Origin Stack looks like this: ");
+        System.out.println("--------------");
+        System.out.println(this.plans.get(0).getStacks().getOriginStack().toString());
+        System.out.println("--------------");
+
+
     }
 
     void mutateGeneration(int percentageToMutate, List<Plan> generationToMutate) {
@@ -90,7 +129,7 @@ public class Generation {
 
         if (generationToMutate == null || generationToMutate.size() == 0) return;
 
-        float mutationTarget = (generationToMutate.size() / percentageToMutate) * 100;
+        double mutationTarget = (((float) percentageToMutate / 100) * generationToMutate.size());
 
         int numberOfPlansToMutate = (int) mutationTarget;
 
@@ -103,7 +142,7 @@ public class Generation {
     List<Plan> getPlansToPreserve(List<Plan> bestPlans, int numberToPreserve) {
 
         List<Plan> preservedPlans = new ArrayList<>();
-        for (int i = 0; i < numberToPreserve || i < bestPlans.size() - 1; i++) {
+        for (int i = 0; i < numberToPreserve && i < bestPlans.size(); i++) {
             preservedPlans.add(bestPlans.get(i));
         }
 
@@ -170,11 +209,9 @@ public class Generation {
 
     List<Plan> getBestPlans(int percentageOfBest) {
 
-        if (this.plans == null)
+        if (CollectionUtils.isEmpty(this.plans)) {
             throw new UnsupportedOperationException("There are no plans set on this object, thus I cannot return the best");
-
-        if (this.plans.size() == 0)
-            throw new UnsupportedOperationException("There are no plans set on this object, thus I cannot return the best");
+        }
 
         if (percentageOfBest == 0) return new ArrayList<Plan>();
 

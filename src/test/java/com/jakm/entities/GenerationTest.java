@@ -20,11 +20,9 @@ public class GenerationTest {
     @BeforeEach
     void setUp() {
 
-
         plans = new ArrayList<Plan>();
-        initialState = Arrays.asList("A", "B", "C");
-        targetState = Arrays.asList("C", "B", "A");
-
+        initialState = Arrays.asList("C", "B", "A");
+        targetState = Arrays.asList("A", "B", "C");
 
     }
 
@@ -77,8 +75,8 @@ public class GenerationTest {
     @Test
     void doesGenerationSelectRightNumberOfGoodPlans() {
 
-        List<String> initialState = Arrays.asList("B", "A", "C");
-        List<String> targetState = Arrays.asList("A", "B", "C");
+        List<String> initialState = Arrays.asList("D", "C", "B", "A");
+        List<String> targetState = Arrays.asList("A", "B", "C", "D");
 
         Plan firstPlan = new Plan(3, initialState, targetState);
         Plan secondPlan = new Plan(3, initialState, targetState);
@@ -90,12 +88,15 @@ public class GenerationTest {
         thirdPlan.setPlanScore(8);
         fourthPlan.setPlanScore(7);
 
-        classToTest = new Generation(plans, initialState, targetState, 100, 10);
+        List<Plan> plans = new ArrayList<>();
+        plans.add(firstPlan);
+        plans.add(secondPlan);
+        plans.add(thirdPlan);
+        plans.add(fourthPlan);
 
-        classToTest.getPlans().add(firstPlan);
-        classToTest.getPlans().add(secondPlan);
-        classToTest.getPlans().add(thirdPlan);
-        classToTest.getPlans().add(fourthPlan);
+        classToTest = new Generation(plans, initialState, targetState, 4, 20);
+        //replace the plans created by the constructor
+        classToTest.setPlans(plans);
 
         List<Plan> bestPlans = classToTest.getBestPlans(50);
 
@@ -121,12 +122,14 @@ public class GenerationTest {
         thirdPlan.setPlanScore(8);
         fourthPlan.setPlanScore(7);
 
-        classToTest = new Generation(plans, initialState, targetState, 100, 10);
+        List<Plan> testPlans = new ArrayList<>();
+        testPlans.add(firstPlan);
+        testPlans.add(secondPlan);
+        testPlans.add(thirdPlan);
+        testPlans.add(fourthPlan);
 
-        classToTest.getPlans().add(firstPlan);
-        classToTest.getPlans().add(secondPlan);
-        classToTest.getPlans().add(thirdPlan);
-        classToTest.getPlans().add(fourthPlan);
+        classToTest = new Generation(plans, initialState, targetState, 4, 10);
+        classToTest.setPlans(testPlans);
 
         List<Plan> worstPlans = classToTest.getWorstPlans(50);
 
@@ -142,46 +145,22 @@ public class GenerationTest {
         List<String> initialState = Arrays.asList("B", "A", "C");
         List<String> targetState = Arrays.asList("A", "B", "C");
 
-        Plan firstPlan = new Plan(3, initialState, targetState);
-        Plan secondPlan = new Plan(3, initialState, targetState);
-        Plan thirdPlan = new Plan(3, initialState, targetState);
-        Plan fourthPlan = new Plan(3, initialState, targetState);
-        Plan fifthPlan = new Plan(3, initialState, targetState);
-        Plan sixthPlan = new Plan(3, initialState, targetState);
-        Plan seventhPlan = new Plan(3, initialState, targetState);
-        Plan eithhPlan = new Plan(3, initialState, targetState);
-        Plan ninthPlan = new Plan(3, initialState, targetState);
-        Plan tenthPlan = new Plan(3, initialState, targetState);
+        classToTest = new Generation(plans, initialState, targetState, 10, 10);
 
-        firstPlan.setPlanScore(10);
-        secondPlan.setPlanScore(9);
-        thirdPlan.setPlanScore(8);
-        fourthPlan.setPlanScore(5);
-        fifthPlan.setPlanScore(5);
-        sixthPlan.setPlanScore(4);
-        seventhPlan.setPlanScore(4);
-        eithhPlan.setPlanScore(4);
-        ninthPlan.setPlanScore(4);
-        tenthPlan.setPlanScore(4);
-
-        classToTest = new Generation(plans, initialState, targetState, 100, 10);
-
-        classToTest.getPlans().add(firstPlan);
-        classToTest.getPlans().add(secondPlan);
-        classToTest.getPlans().add(thirdPlan);
-        classToTest.getPlans().add(fourthPlan);
-        classToTest.getPlans().add(fifthPlan);
-        classToTest.getPlans().add(sixthPlan);
-        classToTest.getPlans().add(seventhPlan);
-        classToTest.getPlans().add(eithhPlan);
-        classToTest.getPlans().add(ninthPlan);
-        classToTest.getPlans().add(tenthPlan);
+        classToTest.getPlans().get(0).setPlanScore(10);
+        classToTest.getPlans().get(1).setPlanScore(9);
+        classToTest.getPlans().get(2).setPlanScore(8);
+        classToTest.getPlans().get(3).setPlanScore(5);
+        classToTest.getPlans().get(4).setPlanScore(5);
+        classToTest.getPlans().get(5).setPlanScore(4);
+        classToTest.getPlans().get(6).setPlanScore(4);
+        classToTest.getPlans().get(7).setPlanScore(4);
+        classToTest.getPlans().get(8).setPlanScore(4);
+        classToTest.getPlans().get(9).setPlanScore(4);
 
         List<Plan> worstPlans = classToTest.getWorstPlans(20);
 
         assertEquals(2, worstPlans.size());
-        assertTrue(worstPlans.contains(tenthPlan));
-        assertTrue(worstPlans.contains(ninthPlan));
 
     }
 
@@ -436,6 +415,64 @@ public class GenerationTest {
         List<Plan> returnedPlans = classToTest.getPlansToPreserve(testPlans, 1);
 
         assertEquals(1, returnedPlans.size());
+
+    }
+
+    @Test
+    void runOneGeneration() {
+        classToTest = new Generation(plans, initialState, targetState, 100, 10);
+
+        this.classToTest.runGeneration(20, 10, 1, 10);
+    }
+
+    @Test
+    void generationShouldStopWhenWeHaveAWinningPlan() {
+        classToTest = new Generation(plans, initialState, targetState, 4, 10);
+
+        Plan firstPlan = new Plan(3, initialState, targetState);
+        Plan secondPlan = new Plan(3, initialState, targetState);
+        Plan thirdPlan = new Plan(3, initialState, targetState);
+        Plan fourthPlan = new Plan(3, initialState, targetState);
+
+        firstPlan.setPlanScore(100);
+        secondPlan.setPlanScore(9);
+        thirdPlan.setPlanScore(8);
+        fourthPlan.setPlanScore(7);
+
+        Step step1 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step2 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step3 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        Step step4 = new Step(StackNames.ORIGINSTACK, StackNames.FIRSTSTACK);
+        List<Step> steps1 = new ArrayList<>();
+        steps1.add(step1);
+        steps1.add(step2);
+        steps1.add(step3);
+        steps1.add(step4);
+        firstPlan.setSteps(steps1);
+
+        this.plans.add(firstPlan);
+        this.plans.add(secondPlan);
+        this.plans.add(thirdPlan);
+        this.plans.add(fourthPlan);
+
+        List<Plan> testPlans = new ArrayList<>();
+        testPlans.add(firstPlan);
+        testPlans.add(secondPlan);
+        testPlans.add(thirdPlan);
+        testPlans.add(fourthPlan);
+        classToTest.setPlans(testPlans);
+
+        List<Plan> successfulPlans = classToTest.run();
+
+        assertEquals(1, successfulPlans.size());
+        Plan successfulPlan = successfulPlans.get(0);
+
+        assertEquals(4, successfulPlan.getSteps().size());
+
+        successfulPlan.getSteps().forEach((Step step) -> {
+            assertEquals(StackNames.ORIGINSTACK, step.getFrom());
+            assertEquals(StackNames.FIRSTSTACK, step.getTo());
+        });
 
     }
 

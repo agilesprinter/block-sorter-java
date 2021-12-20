@@ -16,17 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PlanTest {
 
     private Plan classToTest;
-    private int planSize;
 
     @BeforeEach
-    void setUp() {
+    void commonObjects() {
 
-        List<String> targetState = Arrays.asList("B", "A", "C");
-        List<String> initialState = Arrays.asList("A", "B", "C");
+        List<String> defaultTargetState = Arrays.asList("B", "A", "C");
+        List<String> defaultInitialState = Arrays.asList("A", "B", "C");
 
-        Stacks testStacks = new Stacks(initialState);
-
-        classToTest = new Plan(10, initialState, targetState);
+        this.classToTest = new Plan(10, defaultInitialState, defaultTargetState);
 
     }
 
@@ -34,7 +31,7 @@ public class PlanTest {
     void generatePlan_shouldGenerateARandomPlan() {
 
         //the plan moves around its blocks as it creates the plan
-        classToTest.generateAndRunNewPlan();
+        this.classToTest.generateRandomPlan();
 
         Assert.assertEquals(10, classToTest.getSteps().size());
     }

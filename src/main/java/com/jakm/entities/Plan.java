@@ -26,16 +26,19 @@ public class Plan {
     int planSize;
     int planScore;
     List<String> initialState;
+    List<String> postPlanExecutionState;
     List<String> targetState;
-    Stacks myStacks;
-    List<Step> steps = new ArrayList<Step>();
+    Stacks stacks;
+    List<Step> steps;
     private Random rand = new Random();
     private List<MutatorIF> mutators = new ArrayList();
+    private FitnessFunciton fitnessFunciton;
 
     public Plan(int planSize, List<String> initialState, List<String> targetState) {
 
-        if (initialState == null || targetState == null)
-            throw new RuntimeException("Plan cannot be created. Stacks object is null");
+        if (CollectionUtils.isEmpty(initialState) || CollectionUtils.isEmpty(targetState)) {
+            throw new RuntimeException("Plan cannot be created. Initial or Target objects are null");
+        }
 
         if (initialState.size() != targetState.size()) {
             throw new RuntimeException("Initial state and target state must have the same number of blocks");
@@ -48,9 +51,12 @@ public class Plan {
         this.planSize = planSize;
         this.initialState = initialState;
         this.targetState = targetState;
-        this.myStacks = new Stacks(initialState);
+        this.fitnessFunciton = new FitnessFunciton();
+        this.stacks = new Stacks(initialState);
 
         this.mutators.add(new MutatorFlip());
+
+        this.steps = generateRandomPlan();
     }
 
     /**
@@ -61,7 +67,10 @@ public class Plan {
      *
      * @return
      */
-    void generateAndRunNewPlan() {
+    List<Step> generateRandomPlan() {
+
+        //reinitialize the steps. We're going to start again
+        this.steps = new ArrayList<>();
 
         for (int i = 0; i < planSize; i++) {
 
@@ -69,15 +78,12 @@ public class Plan {
 
             Step step = new Step(from, getAnyToStackOtherThan(from));
 
-            //we must apply the step each time to ensure the next steps which are generated
-            //will keep making sense.
-            myStacks.applyStep(step);
-
             //keep a record of the steps that we are generating
             steps.add(step);
 
         }
 
+        return steps;
 
     }
 
@@ -90,7 +96,7 @@ public class Plan {
 
         List<StackNames> possibleStacks = new ArrayList<>();
 
-        for (Map.Entry<StackNames, List<String>> entry : myStacks.getStacks().entrySet()) {
+        for (Map.Entry<StackNames, List<String>> entry : stacks.getStacks().entrySet()) {
 
             StackNames stackName = entry.getKey();
             List<String> stack = entry.getValue();
@@ -110,7 +116,7 @@ public class Plan {
     StackNames getAnyToStackOtherThan(StackNames from) {
 
         List<StackNames> possibleStacks =
-                myStacks.getStacks().keySet().
+                stacks.getStacks().keySet().
                         stream().filter(element -> !element.equals(from))
                         .collect(Collectors.toList());
 
@@ -148,8 +154,36 @@ public class Plan {
         if (CollectionUtils.isEmpty(this.mutators))
             throw new UnsupportedOperationException("Every plan must have at least one Mutator");
 
-        //just assume 1 mutator for now. We can add more later
-        this.mutators.get(0).mutate(this.steps, 1);
+        //get any of our mutators to mutate a single step
+        this.mutators.get(rand.nextInt(mutators.size())).mutate(this.steps, 1);
+
+    }
+
+    protected void scorePlan() {
+
+        int rawScore = this.fitnessFunciton.howFit(this.targetState, this.postPlanExecutionState);
+
+        int percentageFit = Math.round(this.fitnessFunciton.percentageFit(this.targetState.size(), rawScore));
+
+        this.setPlanScore(percentageFit);
+    }
+
+    void executeAndScorePlan() {
+
+        //First we must reset the local stack state to be that of the initial problem state
+        //as this could be a second generation Plan
+
+        //set up the stack of bricks that we're going to alter
+        this.postPlanExecutionState = new ArrayList<>();
+        this.postPlanExecutionState.addAll(this.initialState);
+
+        //this set of blocks will be manipulated
+        this.stacks = new Stacks(postPlanExecutionState);
+
+        this.steps.forEach(step -> this.stacks.applyStep(step));
+
+        //score the plan. Remember we are only ever comparing ORIGIN
+        scorePlan();
 
     }
 

@@ -3,6 +3,7 @@ package com.jakm.entities;
 import com.jakm.interfaces.StackNames;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,10 @@ public class Stacks implements StacksIF {
 
         List<String> fromStack = stacks.get(step.from);
         List<String> toStack = stacks.get(step.to);
+
+        //plans will have steps that don't make sense and are random
+        //when we see one, just move past it
+        if (CollectionUtils.isEmpty(fromStack)) return;
 
         toStack.add(fromStack.get(this.getTopBlockIndex(step.from)));
 

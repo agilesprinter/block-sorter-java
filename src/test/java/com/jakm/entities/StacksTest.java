@@ -23,6 +23,22 @@ class StacksTest {
     }
 
     @Test
+    void doesApplyStepIgnoreStepsThatCannotWork() {
+
+        assertEquals(3, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+        Step step1 = new Step(StackNames.FIRSTSTACK, StackNames.SECONDSTACK);
+        classToTest.applyStep(step1);
+
+        assertEquals(3, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.FIRSTSTACK).size());
+        assertEquals(0, classToTest.getStacks().get(StackNames.SECONDSTACK).size());
+
+    }
+
+    @Test
     void doesApplyStepMoveBlocks() {
 
         assertEquals(3, classToTest.getStacks().get(StackNames.ORIGINSTACK).size());
