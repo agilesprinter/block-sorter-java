@@ -1,20 +1,37 @@
 package com.jakm.entities;
 
+import org.springframework.util.CollectionUtils;
+
 import java.util.List;
 
 public class FitnessFunciton {
 
     public int howFit(List<String> targetState, List<String> currentState) {
-        if (targetState == null || currentState == null)
+
+        if (CollectionUtils.isEmpty(targetState))
             throw new RuntimeException("Target and Current States cannot be null");
-        if (targetState.size() == 0 || currentState.size() == 0)
-            throw new RuntimeException("Target and Current States cannot be empty");
+
+        //if the current state is empty then the score is always zero.
+        if (CollectionUtils.isEmpty(currentState)) return 0;
 
         int rawScore = 0;
 
         rawScore = getPositionSimilarity(targetState, currentState, rawScore);
 
-        return rawScore;
+        int rawPercentageFit = Math.round(percentageFit(targetState.size(), rawScore));
+
+        //now we can start assigning bonus points for other positive features of incorrect plans
+        if (rawPercentageFit < 100) {
+            // if it's a correct plan, don't bother with bonus points
+            if (currentState.size() > 0) rawPercentageFit++;
+        }
+
+        if (rawPercentageFit < 100) {
+            // if it's a correct plan, don't bother with bonus points
+            if (currentState.size() == targetState.size()) rawPercentageFit++;
+        }
+
+        return rawPercentageFit;
     }
 
     public int getPositionSimilarity(List<String> targetState, List<String> currentState, int rawScore) {

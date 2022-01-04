@@ -5,19 +5,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 public class Stacks implements StacksIF {
 
+    private static final String EMPTY_BLOCK = "[_]";
     private final List<String> originStack;
     private final List<String> firstStack;
     private final List<String> secondStack;
     private final Map<StackNames, List<String>> stacks;
+    private Random rand = new Random();
+
 
     private final List<String> initialState;
 
@@ -64,4 +65,87 @@ public class Stacks implements StacksIF {
 
         return stack.size() - 1;
     }
+
+    /**
+     * Get me any of the other stacks, but not from
+     *
+     * @return
+     */
+    StackNames getAnyStack() {
+
+        return getRandomElementFrom(stacks.keySet().stream().collect(Collectors.toList()));
+    }
+
+    /**
+     * Get me THE NAME OF any stack that I could take a block from
+     *
+     * @return
+     */
+    StackNames getNonEmptyFromStack() {
+
+        List<StackNames> possibleStacks = new ArrayList<>();
+
+        for (Map.Entry<StackNames, List<String>> entry : stacks.entrySet()) {
+
+            StackNames stackName = entry.getKey();
+            List<String> stack = entry.getValue();
+
+            if (!stack.isEmpty()) possibleStacks.add(stackName);
+        }
+
+        return getRandomElementFrom(possibleStacks);
+    }
+
+
+    /**
+     * Get me any of the other stacks, but not from
+     *
+     * @param from
+     * @return
+     */
+    StackNames getAnyToStackOtherThan(StackNames from) {
+
+        List<StackNames> possibleStacks =
+                stacks.keySet().
+                        stream().filter(element -> !element.equals(from))
+                        .collect(Collectors.toList());
+
+        return getRandomElementFrom(possibleStacks);
+    }
+
+    StackNames getRandomElementFrom(List<StackNames> selection) {
+        if (selection == null || selection.size() == 0)
+            throw new RuntimeException("selection is null, I can't chose a random one from a null list");
+
+        StackNames stackName = selection.get(rand.nextInt(selection.size()));
+
+        return stackName;
+    }
+
+    void printStacks() {
+        int maxLengthOfWingStacks = Math.max(firstStack.size(), secondStack.size());
+        int maxLengthOfAllStacks = Math.max(maxLengthOfWingStacks, originStack.size());
+
+        StringBuffer line;
+        for (int i = maxLengthOfAllStacks; i > -1; i--) {
+            line = new StringBuffer();
+            line.append(this.printBlock(i, StackNames.FIRSTSTACK));
+            line.append(this.printBlock(i, StackNames.ORIGINSTACK));
+            line.append(this.printBlock(i, StackNames.SECONDSTACK));
+            System.out.println(line);
+        }
+    }
+
+    String printBlock(int index, StackNames stackName) {
+        List<String> stack = this.getStacks().get(stackName);
+
+        if (CollectionUtils.isEmpty(stack)) return EMPTY_BLOCK;
+
+        if (stack.size() > index) {
+            return "[" + stack.get(index) + "]";
+        }
+
+        return EMPTY_BLOCK;
+    }
+
 }

@@ -34,7 +34,7 @@ public class FitnessFunctionTest {
         List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
         List<String> currentState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
 
-        assertEquals(3, classToTest.howFit(targetState, currentState));
+        assertEquals(100, classToTest.howFit(targetState, currentState));
 
 
     }
@@ -45,8 +45,7 @@ public class FitnessFunctionTest {
         List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
         List<String> currentState = new Utils().blockSetCreator(Arrays.asList("A", "C", "B"));
 
-        assertEquals(1, classToTest.howFit(targetState, currentState));
-
+        assertEquals(35, classToTest.howFit(targetState, currentState));
 
     }
 
@@ -56,7 +55,7 @@ public class FitnessFunctionTest {
         List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C"));
         List<String> currentState = new Utils().blockSetCreator(Arrays.asList("C", "A", "B"));
 
-        assertEquals(0, classToTest.howFit(targetState, currentState));
+        assertEquals(2, classToTest.howFit(targetState, currentState));
 
 
     }
@@ -94,6 +93,22 @@ public class FitnessFunctionTest {
         int targetStateSize = 6, rawScore = 0;
 
         assertEquals(0, classToTest.percentageFit(targetStateSize, rawScore));
+
+    }
+
+    @Test
+    void percentageFit_should_give_points_for_correct_length() {
+
+        List<String> targetState = new Utils().blockSetCreator(Arrays.asList("A", "B", "C", "D"));
+        List<String> currentState = new Utils().blockSetCreator(Arrays.asList("C", "A", "B", "D"));
+
+        int howFit = classToTest.howFit(targetState, currentState);
+
+        //we have one block in the right place so we should get 25 points for that
+        //we have the correct length of plan so we should get an extra 10 points for that
+
+        assertEquals(27, classToTest.howFit(targetState, currentState));
+
 
     }
 

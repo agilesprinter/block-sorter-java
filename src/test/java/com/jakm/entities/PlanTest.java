@@ -37,25 +37,6 @@ public class PlanTest {
     }
 
     @Test
-    void getNonEmptyFromStack_shouldGiveMeAStackToMoveFrom() {
-
-        StackNames fromStackSuggestion = classToTest.getNonEmptyFromStack();
-
-        Assert.assertEquals(StackNames.ORIGINSTACK, fromStackSuggestion);
-
-    }
-
-    @Test
-    void getAnyToBlockOtherThan_shouldGiveMeAStackToMoveTo() {
-
-        StackNames toStackSuggestion = classToTest.getAnyToStackOtherThan(StackNames.ORIGINSTACK);
-
-        //this should give randomly firstStack or secondStack
-        Assert.assertTrue(StackNames.FIRSTSTACK.equals(toStackSuggestion) || StackNames.SECONDSTACK.equals(toStackSuggestion));
-
-    }
-
-    @Test
     void constructor_wrongSizedTargetShouldBeRejected() {
 
         List<String> targetState = Arrays.asList("B", "A", "C");

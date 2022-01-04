@@ -56,12 +56,22 @@ public class Generation {
 
             if (!CollectionUtils.isEmpty(successfulPlans)) {
                 System.out.println("Winner winner on generation " + i + "!!");
-                System.out.println(successfulPlans);
+                System.out.println("Here is how is is done: ");
+                System.out.println("----");
+                successfulPlans.get(0).getSteps().forEach(step ->
+                {
+                    System.out.println(step);
+
+                });
+                System.out.println("----");
+                System.out.println("----");
+                System.out.println("Here is the state of Origin at the end of the plan:");
+                System.out.println(successfulPlans.get(0).getStacks().getOriginStack());
                 //no need to continue here, we found a winning plan
                 return successfulPlans;
             }
 
-            runGeneration(20, 10, 1, 10);
+            runGeneration(40, 10, 20);
 
         }
 
@@ -69,7 +79,7 @@ public class Generation {
 
     }
 
-    public void runGeneration(int percentageOfBest, int percentageOfWorst, int numberOfMutations, int percentageToMutate) {
+    public void runGeneration(int percentageOfBest, int percentageOfWorst, int percentageToMutate) {
 
         //sort the plans first.
         this.plans.sort(Comparator.comparing(Plan::getPlanScore));
@@ -88,21 +98,21 @@ public class Generation {
 
         //identify the best 10 plans from the last generation and let them pass into the next
         //generation unchanged
-        List<Plan> preservedPlans = getPlansToPreserve(bestPlans, 10);
+        List<Plan> preservedPlans = getPlansToPreserve(bestPlans, 0);
 
         List<Plan> nextGeneration = new ArrayList<>();
         nextGeneration.addAll(preservedPlans);
         nextGeneration.addAll(newChildren);
 
         //fill nextGeneration with new plans so the generation size remains constant
-        int numberOfNewPlansNeeded = nextGeneration.size() - getHowManyPlans();
+        int numberOfNewPlansNeeded = getHowManyPlans() - nextGeneration.size();
 
         List<Plan> brandNewPlans = createPlans(numberOfNewPlansNeeded);
 
         nextGeneration.addAll(brandNewPlans);
 
         //perform mutations on a percentage of this next Generation
-        mutateGeneration(20, nextGeneration);
+        mutateGeneration(percentageToMutate, nextGeneration);
 
         //exectute and score all the plans
         nextGeneration.forEach(plan -> plan.executeAndScorePlan());
@@ -117,7 +127,8 @@ public class Generation {
         System.out.println(this.plans.get(0).getSteps().toString());
         System.out.println("Origin Stack looks like this: ");
         System.out.println("--------------");
-        System.out.println(this.plans.get(0).getStacks().getOriginStack().toString());
+        //System.out.println(this.plans.get(0).getStacks().getOriginStack().toString());
+        this.plans.get(0).getStacks().printStacks();
         System.out.println("--------------");
 
 

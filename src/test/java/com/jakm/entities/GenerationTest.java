@@ -422,7 +422,7 @@ public class GenerationTest {
     void runOneGeneration() {
         classToTest = new Generation(plans, initialState, targetState, 100, 10);
 
-        this.classToTest.runGeneration(20, 10, 1, 10);
+        this.classToTest.runGeneration(20, 10, 10);
     }
 
     @Test
@@ -474,6 +474,16 @@ public class GenerationTest {
             assertEquals(StackNames.FIRSTSTACK, step.getTo());
         });
 
+    }
+
+    //@Test
+    void runFirstRealProblem() {
+
+        List<String> initialState = Arrays.asList("E", "B", "D", "C", "A");
+        List<String> targetState = Arrays.asList("A", "B", "C", "D", "E");
+
+        classToTest = new Generation(null, targetState, initialState, 1000, 10);
+        classToTest.run();
     }
 
 }

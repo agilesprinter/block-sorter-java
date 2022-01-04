@@ -7,9 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 
 /**
@@ -25,14 +23,14 @@ public class Plan {
 
     int planSize;
     int planScore;
-    List<String> initialState;
-    List<String> postPlanExecutionState;
-    List<String> targetState;
+    final List<String> initialState;
+    final List<String> targetState;
     Stacks stacks;
     List<Step> steps;
     private Random rand = new Random();
     private List<MutatorIF> mutators = new ArrayList();
     private FitnessFunciton fitnessFunciton;
+    private int generation;
 
     public Plan(int planSize, List<String> initialState, List<String> targetState) {
 
@@ -57,6 +55,7 @@ public class Plan {
         this.mutators.add(new MutatorFlip());
 
         this.steps = generateRandomPlan();
+        this.generation = 0;
     }
 
     /**
@@ -74,9 +73,9 @@ public class Plan {
 
         for (int i = 0; i < planSize; i++) {
 
-            StackNames from = getNonEmptyFromStack();
+            StackNames from = this.stacks.getAnyStack();
 
-            Step step = new Step(from, getAnyToStackOtherThan(from));
+            Step step = new Step(from, this.stacks.getAnyToStackOtherThan(from));
 
             //keep a record of the steps that we are generating
             steps.add(step);
@@ -87,50 +86,6 @@ public class Plan {
 
     }
 
-    /**
-     * Get me THE NAME OF any stack that I could take a block from
-     *
-     * @return
-     */
-    StackNames getNonEmptyFromStack() {
-
-        List<StackNames> possibleStacks = new ArrayList<>();
-
-        for (Map.Entry<StackNames, List<String>> entry : stacks.getStacks().entrySet()) {
-
-            StackNames stackName = entry.getKey();
-            List<String> stack = entry.getValue();
-
-            if (!stack.isEmpty()) possibleStacks.add(stackName);
-        }
-
-        return getRandomElementFrom(possibleStacks);
-    }
-
-    /**
-     * Get me any of the other stacks, but not from
-     *
-     * @param from
-     * @return
-     */
-    StackNames getAnyToStackOtherThan(StackNames from) {
-
-        List<StackNames> possibleStacks =
-                stacks.getStacks().keySet().
-                        stream().filter(element -> !element.equals(from))
-                        .collect(Collectors.toList());
-
-        return getRandomElementFrom(possibleStacks);
-    }
-
-    StackNames getRandomElementFrom(List<StackNames> selection) {
-        if (selection == null || selection.size() == 0)
-            throw new RuntimeException("selection is null, I can't chose a random one from a null list");
-
-        StackNames stackName = selection.get(rand.nextInt(selection.size()));
-
-        return stackName;
-    }
 
     void combinePlans(Plan otherPlan) {
 
@@ -161,11 +116,9 @@ public class Plan {
 
     protected void scorePlan() {
 
-        int rawScore = this.fitnessFunciton.howFit(this.targetState, this.postPlanExecutionState);
+        int rawScore = this.fitnessFunciton.howFit(this.targetState, this.stacks.getOriginStack());
 
-        int percentageFit = Math.round(this.fitnessFunciton.percentageFit(this.targetState.size(), rawScore));
-
-        this.setPlanScore(percentageFit);
+        this.setPlanScore(rawScore);
     }
 
     void executeAndScorePlan() {
@@ -173,17 +126,16 @@ public class Plan {
         //First we must reset the local stack state to be that of the initial problem state
         //as this could be a second generation Plan
 
-        //set up the stack of bricks that we're going to alter
-        this.postPlanExecutionState = new ArrayList<>();
-        this.postPlanExecutionState.addAll(this.initialState);
-
         //this set of blocks will be manipulated
-        this.stacks = new Stacks(postPlanExecutionState);
+        this.stacks = new Stacks(initialState);
 
         this.steps.forEach(step -> this.stacks.applyStep(step));
 
         //score the plan. Remember we are only ever comparing ORIGIN
         scorePlan();
+        //finally mark this plan as having completed a generation.
+        //this is useful to understand if a plan is making it from one generation to another
+        this.generation++;
 
     }
 

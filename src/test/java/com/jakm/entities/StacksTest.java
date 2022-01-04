@@ -1,6 +1,7 @@
 package com.jakm.entities;
 
 import com.jakm.interfaces.StackNames;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -156,5 +157,25 @@ class StacksTest {
         assertEquals(0, secondStack.size());
 
     }
+
+    @Test
+    void getNonEmptyFromStack_shouldGiveMeAStackToMoveFrom() {
+
+        StackNames fromStackSuggestion = classToTest.getNonEmptyFromStack();
+
+        Assert.assertEquals(StackNames.ORIGINSTACK, fromStackSuggestion);
+
+    }
+
+    @Test
+    void getAnyToBlockOtherThan_shouldGiveMeAStackToMoveTo() {
+
+        StackNames toStackSuggestion = classToTest.getAnyToStackOtherThan(StackNames.ORIGINSTACK);
+
+        //this should give randomly firstStack or secondStack
+        Assert.assertTrue(StackNames.FIRSTSTACK.equals(toStackSuggestion) || StackNames.SECONDSTACK.equals(toStackSuggestion));
+
+    }
+
 
 }
