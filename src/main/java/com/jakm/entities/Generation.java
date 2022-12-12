@@ -19,6 +19,7 @@ public class Generation {
     List<String> initialState;
     int howManyPlans;
     int maxLengthOfEachPlan;
+    int generation;
 
     public Generation(List<Plan> plans, List<String> targetState, List<String> initialState, int howManyPlans, int maxLengthOfEachPlan) {
 
@@ -32,6 +33,7 @@ public class Generation {
         this.howManyPlans = howManyPlans;
         this.maxLengthOfEachPlan = maxLengthOfEachPlan;
 
+        this.generation = 0;
         //this is the first generation, so we need to create an object for the Plans
         if (CollectionUtils.isEmpty(this.plans)) this.plans = createPlans(this.howManyPlans);
 
@@ -66,12 +68,13 @@ public class Generation {
                 System.out.println("----");
                 System.out.println("----");
                 System.out.println("Here is the state of Origin at the end of the plan:");
-                System.out.println(successfulPlans.get(0).getStacks().getOriginStack());
+                this.plans.get(0).getStacks().printStacks();
                 //no need to continue here, we found a winning plan
                 return successfulPlans;
             }
 
             runGeneration(40, 10, 20);
+            generation++;
 
         }
 
@@ -123,15 +126,31 @@ public class Generation {
 
         //temporary debug to see what is happening
         this.plans.sort(Comparator.comparing(Plan::getPlanScore));
-        System.out.println("Top score is: " + this.plans.get(0).getPlanScore());
+        System.out.println("Top score is: " + this.plans.get(0).getPlanScore() + " in generation: " + this.generation);
         System.out.println(this.plans.get(0).getSteps().toString());
         System.out.println("Origin Stack looks like this: ");
         System.out.println("--------------");
         //System.out.println(this.plans.get(0).getStacks().getOriginStack().toString());
         this.plans.get(0).getStacks().printStacks();
+        System.out.println("Statistics on the Plans in generation " + this.generation);
+        reportGenerationStatistics();
+
+    }
+
+    private void reportGenerationStatistics() {
+        int movesFromFirstToOrigin = 0;
+        int movesFromFirstToSecond = 0;
+        int movesFromOriginToFirst = 0;
+        int movesFromOriginToSecond = 0;
+        int movesFromSecondToOrigin = 0;
+        int movesFromSecondToFirst = 0;
+/*
+        this.plans.forEach(plan -> {
+            plan.getSteps().stream().collect(Collectors.groupingBy(plan -> new Step(plan.getFrom(), plan.getTo())));
+        });
+
+ */
         System.out.println("--------------");
-
-
     }
 
     void mutateGeneration(int percentageToMutate, List<Plan> generationToMutate) {
